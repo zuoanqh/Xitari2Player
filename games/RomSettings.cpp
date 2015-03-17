@@ -37,12 +37,12 @@
 using namespace ale;
 
 bool RomSettings::isLegal(const Action& a) const {
-  return true;
+  return a < PLAYER_B_NOOP;
 }
 
 ActionVect& RomSettings::getMinimalActionSet() {
   if (actions.empty()) {
-    for (int a = 0; a < PLAYER_B_NOOP; a++)
+    for (int a = 0; a <= PLAYER_B_DOWNLEFTFIRE; a++)
       if (isMinimal((Action)a) && isLegal((Action)a))
         actions.push_back((Action)a);
   }
@@ -53,7 +53,7 @@ ActionVect& RomSettings::getMinimalActionSet() {
 ActionVect& RomSettings::getAllActions() {
   // Generate the set of all actions
   if (all_actions.empty()) {
-    for (int a = 0; a < PLAYER_B_NOOP; a++)
+    for (int a = 0; a <= PLAYER_B_DOWNLEFTFIRE; a++)
       if (isLegal((Action)a))
         all_actions.push_back((Action)a);
   }

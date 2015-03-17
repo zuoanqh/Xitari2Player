@@ -383,8 +383,11 @@ int ALEInterface::Impl::lives() const {
 
 
 reward_t ALEInterface::Impl::act(Action action) {
-
-    m_emu->environment->act(action, PLAYER_B_NOOP);
+    if (action < PLAYER_B_NOOP) {
+        m_emu->environment->act(action, PLAYER_B_NOOP);
+    } else {
+        m_emu->environment->act(PLAYER_A_NOOP, action);
+    }
     reward_t reward = m_rom_settings->getReward();
 
     // sanity check rewards

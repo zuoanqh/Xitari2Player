@@ -94,6 +94,7 @@
 #include "supported/VideoChess.hpp"
 #include "supported/VideoPinball.hpp"
 #include "supported/WizardOfWor.hpp"
+#include "supported/WizardOfWor2Player.hpp"
 #include "supported/YarsRevenge.hpp"
 #include "supported/Zaxxon.hpp"
 
@@ -165,6 +166,7 @@ static const RomSettings *roms[]  = {
     new VideoChessSettings(),
     new VideoPinballSettings(),
     new WizardOfWorSettings(),
+    new WizardOfWor2PlayerSettings(),
     new YarsRevengeSettings(),
     new ZaxxonSettings(),
 };
