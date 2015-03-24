@@ -43,8 +43,8 @@
 
 namespace ale {
 
-#define PLAYER_A_MAX (18)
-#define PLAYER_B_MAX (36)
+#define PLAYER_A_MAX (20)
+#define PLAYER_B_MAX (40)
 
 std::string action_to_string(Action a);
 

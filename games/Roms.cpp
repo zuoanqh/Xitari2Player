@@ -46,6 +46,7 @@
 #include "supported/Bowling.hpp"
 #include "supported/Boxing.hpp"
 #include "supported/Breakout.hpp"
+#include "supported/Breakout2Player.hpp"
 #include "supported/Carnival.hpp"
 #include "supported/Centipede.hpp"
 #include "supported/ChopperCommand.hpp"
@@ -118,6 +119,7 @@ static const RomSettings *roms[]  = {
     new BowlingSettings(),
     new BoxingSettings(),
     new BreakoutSettings(),
+    new Breakout2PlayerSettings(),
     new CarnivalSettings(),
     new CentipedeSettings(),
     new ChopperCommandSettings(),

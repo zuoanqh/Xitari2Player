@@ -224,6 +224,12 @@ void ALEState::applyActionPaddles(Event* event, int player_a_action, int player_
         case PLAYER_A_DOWNLEFTFIRE: 
             event->set(Event::PaddleZeroFire, 1);
             break;
+        case PLAYER_A_GRIP_TRIGGER: 
+            event->set(Event::BoosterGripZeroTrigger, 1);
+            break;
+        case PLAYER_A_GRIP_BOOSTER: 
+            event->set(Event::BoosterGripZeroBooster, 1);
+            break;
     default:
       // Nothing
       break;
@@ -240,6 +246,12 @@ void ALEState::applyActionPaddles(Event* event, int player_a_action, int player_
         case PLAYER_B_DOWNRIGHTFIRE: 
         case PLAYER_B_DOWNLEFTFIRE: 
             event->set(Event::PaddleOneFire, 1);
+            break;
+        case PLAYER_B_GRIP_TRIGGER: 
+            event->set(Event::BoosterGripOneTrigger, 1);
+            break;
+        case PLAYER_B_GRIP_BOOSTER: 
+            event->set(Event::BoosterGripOneBooster, 1);
             break;
     default:
       // Nothing
@@ -338,6 +350,13 @@ void ALEState::setActionJoysticks(Event* event, int player_a_action, int player_
           event->set(Event::JoystickZeroLeft, 1);
           event->set(Event::JoystickZeroFire, 1);
           break; 
+
+      case PLAYER_A_GRIP_TRIGGER: 
+          event->set(Event::BoosterGripZeroTrigger, 1);
+          break;
+      case PLAYER_A_GRIP_BOOSTER: 
+          event->set(Event::BoosterGripZeroBooster, 1);
+          break;
       case RESET:
           event->set(Event::ConsoleReset, 1);
           break;
@@ -437,6 +456,13 @@ void ALEState::setActionJoysticks(Event* event, int player_a_action, int player_
           event->set(Event::JoystickOneLeft, 1);
           event->set(Event::JoystickOneFire, 1);
           break; 
+
+      case PLAYER_B_GRIP_TRIGGER: 
+          event->set(Event::BoosterGripOneTrigger, 1);
+          break;
+      case PLAYER_B_GRIP_BOOSTER: 
+          event->set(Event::BoosterGripOneBooster, 1);
+          break;
       case RESET:
           event->set(Event::ConsoleReset, 1);
           break;
@@ -470,6 +496,12 @@ void ALEState::resetKeys(Event* event) {
     // also reset paddle fire
     event->set(Event::PaddleZeroFire, 0);
     event->set(Event::PaddleOneFire, 0);
+
+    // also reset booster state
+    event->set(Event::BoosterGripZeroTrigger, 0);
+    event->set(Event::BoosterGripZeroBooster, 0);
+    event->set(Event::BoosterGripOneTrigger, 0);
+    event->set(Event::BoosterGripOneBooster, 0);
 }
 
 bool ALEState::equals(ALEState &rhs) {
