@@ -117,6 +117,9 @@ void ALEState::setPaddles(Event * event, int left, int right) {
   // Update the events with the new resistances
   event->set(Event::PaddleZeroResistance, left_resistance);
   event->set(Event::PaddleOneResistance, right_resistance);
+  event->set(Event::PaddleTwoResistance, right_resistance);
+  event->set(Event::PaddleThreeResistance, left_resistance);
+  //std::cout << "left_resistance: " << left_resistance << ", right_resistance: " << right_resistance << std::endl;
 }
 
 /* *********************************************************************
@@ -163,7 +166,7 @@ void ALEState::applyActionPaddles(Event* event, int player_a_action, int player_
         case PLAYER_A_DOWNRIGHT: 
         case PLAYER_A_UPRIGHTFIRE: 
         case PLAYER_A_DOWNRIGHTFIRE: 
-          delta_left = -PADDLE_DELTA;   
+            delta_left = -PADDLE_DELTA;   
             break; 
             
         case PLAYER_A_LEFT:
@@ -172,7 +175,7 @@ void ALEState::applyActionPaddles(Event* event, int player_a_action, int player_
         case PLAYER_A_DOWNLEFT: 
         case PLAYER_A_UPLEFTFIRE: 
         case PLAYER_A_DOWNLEFTFIRE: 
-      delta_left = PADDLE_DELTA;
+            delta_left = PADDLE_DELTA;
             break;
     default:
       delta_left = 0;
@@ -186,7 +189,7 @@ void ALEState::applyActionPaddles(Event* event, int player_a_action, int player_
         case PLAYER_B_DOWNRIGHT: 
         case PLAYER_B_UPRIGHTFIRE: 
         case PLAYER_B_DOWNRIGHTFIRE: 
-          delta_right = -PADDLE_DELTA;
+            delta_right = -PADDLE_DELTA;
             break; 
             
         case PLAYER_B_LEFT:
@@ -195,7 +198,7 @@ void ALEState::applyActionPaddles(Event* event, int player_a_action, int player_
         case PLAYER_B_DOWNLEFT: 
         case PLAYER_B_UPLEFTFIRE: 
         case PLAYER_B_DOWNLEFTFIRE: 
-      delta_right = PADDLE_DELTA;
+            delta_right = PADDLE_DELTA;
             break;
     default:
       delta_right = 0;

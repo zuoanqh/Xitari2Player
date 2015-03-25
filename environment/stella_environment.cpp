@@ -35,6 +35,7 @@
 #include "stella_environment.hpp"
 #include "../emucore/m6502/src/System.hxx"
 #include <cstring>
+#include <unistd.h>
 
 using namespace ale;
 
@@ -160,7 +161,7 @@ bool StellaEnvironment::load() {
 }
 
 void StellaEnvironment::noopIllegalActions(Action & player_a_action, Action & player_b_action) {
-  if (player_a_action < (Action)PLAYER_B_NOOP && 
+  if (player_a_action < (Action)PLAYER_A_MAX && 
         !m_settings->isLegal(player_a_action)) {
     player_a_action = (Action)PLAYER_A_NOOP;
   }
@@ -168,8 +169,8 @@ void StellaEnvironment::noopIllegalActions(Action & player_a_action, Action & pl
   else if (player_a_action == RESET) 
     player_a_action = (Action)PLAYER_A_NOOP;
 
-  if (player_b_action < (Action)RESET && 
-        !m_settings->isLegal((Action)((int)player_b_action - PLAYER_B_NOOP))) {
+  if (player_b_action < (Action)PLAYER_B_MAX && 
+        !m_settings->isLegal(player_b_action)) {
     player_b_action = (Action)PLAYER_B_NOOP;
   }
   else if (player_b_action == RESET) 
@@ -187,11 +188,13 @@ reward_t StellaEnvironment::act(Action player_a_action, Action player_b_action) 
 
   // Convert illegal actions into NOOPs; actions such as reset are always legal
   noopIllegalActions(player_a_action, player_b_action);
+
+  //std::cout << "PLAYER_A: " << player_a_action << ", PLAYER_B: " << player_b_action << std::endl;
   
   // Emulate in the emulator
   emulate(player_a_action, player_b_action);
   m_state.incrementFrame(); 
-
+  //usleep(100000);
   return m_settings->getReward();
 }
 
@@ -206,6 +209,8 @@ bool StellaEnvironment::isTerminal() const {
 void StellaEnvironment::emulate(Action player_a_action, Action player_b_action, size_t num_steps) {
   Event* event = m_osystem->event();
   
+  //std::cout << "m_use_paddles: " << m_use_paddles << std::endl;
+
   // Handle paddles separately: we have to manually update the paddle positions at each step
   if (m_use_paddles) {
     // Run emulator forward for 'num_steps'

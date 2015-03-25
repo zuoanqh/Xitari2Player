@@ -2583,7 +2583,7 @@ static const char* DefProps[DEF_PROPS_SIZE][21] = {
   { "f33f1d0f7819c74148dacb48cbf1c597", "Retroactive", "", "Qb (2.00) (Retroactive) (Stella)", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "YES", "", "" }, 
   { "f344ac1279152157d63e64aa39479599", "", "", "Espial (1983) (Tigervision) [b2]", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" }, 
   { "f34dd3b8156aaf113cb621b2e51d90b8", "Joe Grand", "", "SCSIcide Pre-release 5 (Joe Grand)", "", "New Release", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" }, 
-  { "f34f08e5eb96e500e851a80be3277a56", "Atari", "CX2622", "Breakout - Breakaway IV (1978) (Atari)", "Uses the Paddle Controllers", "Common", "", "", "", "", "", "", "PADDLES", "", "", "", "", "", "", "", "" }, 
+  { "f34f08e5eb96e500e851a80be3277a56", "Atari", "CX2622", "Breakout - Breakaway IV (1978) (Atari)", "Uses the Paddle Controllers", "Common", "", "", "", "", "", "", "PADDLES", "PADDLES", "", "", "", "", "", "", "" }, 
   { "f367e58667a30e7482175809e3cec4d4", "Zimag", "GN-040 / 708-111", "Cosmic Corridor (Zimag)", "", "Rare", "", "", "", "", "", "", "", "", "", "", "", "220", "", "", "" }, 
   { "f38358cd8f5ecfedffd5aca1aa939f18", "CosmoVision-Universal Gamex", "GX-001", "X-Man (1983) (CosmoVision-Universal Gamex) [a1]", "", "Unbelievably Rare", "", "", "", "", "", "", "", "", "", "", "30", "", "", "", "" }, 
   { "f3c431930e035a457fe370ed4d230659", "Activision", "AX-029", "Crackpots (1983) (Activision) (PAL) [p2][!]", "", "Rare", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "" }, 

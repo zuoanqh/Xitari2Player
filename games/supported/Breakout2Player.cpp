@@ -55,14 +55,18 @@ void Breakout2PlayerSettings::step(const System& system) {
     // update the reward
     int x = readRam(&system, 77);
     int y = readRam(&system, 76);
-    reward_t player_b_score = 1 * (x & 0x000F) + 10 * ((x & 0x00F0) >> 4) + 100 * (y & 0x000F);
+    reward_t active_team_score = 1 * (x & 0x000F) + 10 * ((x & 0x00F0) >> 4) + 100 * (y & 0x000F);
 
-    x = readRam(&system, 78);
-    y = readRam(&system, 79);
-    reward_t player_a_score = 1 * (x & 0x000F) + 10 * ((x & 0x00F0) >> 4) + 100 * (y & 0x000F);
+    x = readRam(&system, 79);
+    y = readRam(&system, 78);
+    reward_t inactive_team_score = 1 * (x & 0x000F) + 10 * ((x & 0x00F0) >> 4) + 100 * (y & 0x000F);
 
-    m_reward = player_a_score + player_b_score - m_score;
-    m_score = player_a_score + player_b_score;
+    //std::cout << "active_team_score: " << active_team_score << ", inactive_team_score: " << inactive_team_score << std::endl; 
+
+    // we sum active and inactive team scores so the score doesn't jump 
+    // and generate reward when the active team changes 
+    m_reward = active_team_score + inactive_team_score - m_score;
+    m_score = active_team_score + inactive_team_score;
 
     // update terminal status
     int byte_val = readRam(&system, 57);
@@ -87,25 +91,21 @@ reward_t Breakout2PlayerSettings::getReward() const {
 
 bool Breakout2PlayerSettings::isLegal(const Action& a) const {
     switch (a) {
+        // left player
         case PLAYER_A_NOOP:
-        // player 1
         case PLAYER_A_FIRE:
         case PLAYER_A_RIGHT:
         case PLAYER_A_LEFT:
-        // player 2
-        case PLAYER_A_UP:
-        case PLAYER_A_DOWN:
-        case PLAYER_A_GRIP_BOOSTER:
+        //case PLAYER_A_UP:
+        //case PLAYER_A_DOWN:
 
+        // right player
         case PLAYER_B_NOOP:
-        // player 3
         case PLAYER_B_FIRE:
         case PLAYER_B_RIGHT:
         case PLAYER_B_LEFT:
-        // player 4
-        case PLAYER_B_UP:
-        case PLAYER_B_DOWN:
-        case PLAYER_B_GRIP_BOOSTER:
+        //case PLAYER_B_UP:
+        //case PLAYER_B_DOWN:
             return true;
         default:
             return false;
