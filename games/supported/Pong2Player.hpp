@@ -48,7 +48,7 @@ class Pong2PlayerSettings : public RomSettings {
 
         // get the most recently observed reward
         reward_t getReward() const;
-
+        reward_t getRewardB() const;
         // the rom-name
         const char* rom() const { return "pong_2player"; }
 
@@ -57,6 +57,7 @@ class Pong2PlayerSettings : public RomSettings {
 
         // is an action legal?
         bool isLegal(const Action& a) const;
+        bool isLegalB(const Action& a) const;
 
         // is an action part of the minimal set?
         bool isMinimal(const Action& a) const;
@@ -74,6 +75,7 @@ class Pong2PlayerSettings : public RomSettings {
         void loadState(Deserializer & ser);
 
         virtual int lives() const { return 0; }
+        virtual int livesB() const { return 0; }
 
         ActionVect getStartingActions();
 
@@ -81,7 +83,9 @@ class Pong2PlayerSettings : public RomSettings {
 
         bool m_terminal;
         reward_t m_reward;
+        reward_t m_rewardB;
         reward_t m_score;
+        reward_t m_scoreB;
 };
 
 } // namespace ale

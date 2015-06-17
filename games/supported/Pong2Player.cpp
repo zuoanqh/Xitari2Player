@@ -55,9 +55,12 @@ void Pong2PlayerSettings::step(const System& system) {
     // update the reward
     int left = readRam(&system, 13); // left player score
     int right = readRam(&system, 14); // right player score
-    reward_t score = -(left + right); // to learn to keep the ball alive we penalize getting points
+    reward_t score = left-right;
+    reward_t scoreB = right - left; 
     m_reward = score - m_score;
+    m_rewardB =scoreB - m_scoreB;
     m_score = score;
+    m_scoreB = scoreB;
 
     // update terminal status
     // game is over when a player reaches 21,
@@ -83,6 +86,12 @@ reward_t Pong2PlayerSettings::getReward() const {
     return m_reward;
 }
 
+/* get the most recently observed reward  for player 2*/
+reward_t Pong2PlayerSettings::getRewardB() const {
+
+    return m_rewardB;
+}
+
 bool Pong2PlayerSettings::isLegal(const Action& a) const {
     switch (a) {
         // left player
@@ -92,6 +101,29 @@ bool Pong2PlayerSettings::isLegal(const Action& a) const {
         case PLAYER_A_LEFT:
         //case PLAYER_A_UP:
         //case PLAYER_A_DOWN:
+/*
+        // right player
+        case PLAYER_B_NOOP:
+        case PLAYER_B_FIRE:
+        case PLAYER_B_RIGHT:
+        case PLAYER_B_LEFT:
+        //case PLAYER_B_UP:
+        //case PLAYER_B_DOWN:*/
+            return true;
+        default:
+            return false;
+    }   
+}
+
+bool Pong2PlayerSettings::isLegalB(const Action& a) const {
+        switch (a) {
+        // left player
+     /*   case PLAYER_A_NOOP:
+        case PLAYER_A_FIRE:
+        case PLAYER_A_RIGHT:
+        case PLAYER_A_LEFT:
+        //case PLAYER_A_UP:
+        //case PLAYER_A_DOWN:*/
 
         // right player
         case PLAYER_B_NOOP:
@@ -117,6 +149,8 @@ void Pong2PlayerSettings::reset() {
 
     m_reward   = 0;
     m_score    = 0;
+    m_rewardB   = 0;
+    m_scoreB    = 0;
     m_terminal = false;
 }
 
@@ -125,6 +159,8 @@ void Pong2PlayerSettings::reset() {
 void Pong2PlayerSettings::saveState(Serializer & ser) {
   ser.putInt(m_reward);
   ser.putInt(m_score);
+  ser.putInt(m_rewardB);
+  ser.putInt(m_scoreB);
   ser.putBool(m_terminal);
 }
 
@@ -133,6 +169,8 @@ void Pong2PlayerSettings::saveState(Serializer & ser) {
 void Pong2PlayerSettings::loadState(Deserializer & ser) {
   m_reward = ser.getInt();
   m_score = ser.getInt();
+  m_rewardB = ser.getInt();
+  m_scoreB = ser.getInt();
   m_terminal = ser.getBool();
 }
 

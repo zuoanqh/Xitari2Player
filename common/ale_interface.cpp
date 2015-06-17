@@ -163,12 +163,17 @@ class ALEInterface::Impl {
         // buttons on the game over screen.
         reward_t act(Action action);
 
+	void act(Action actionA, Action actionB, double* rewardA, double* rewardB);
+
         // Returns the vector of legal actions.
         ActionVect getLegalActionSet();
+        ActionVect getLegalActionSetB();
+
+
 
         // Returns the vector of the minimal set of actions needed to play the game.
         ActionVect getMinimalActionSet();
-
+	ActionVect getMinimalActionSetB();
         // Minimum possible instantaneous reward.
         reward_t minReward() const;
 
@@ -177,6 +182,8 @@ class ALEInterface::Impl {
 
         // The remaining number of lives.
         int lives() const;
+        // The remaining number of lives for player B.
+        int livesB() const;
 
         // Returns the frame number since the loading of the ROM
         int getFrameNumber() const;
@@ -238,6 +245,7 @@ class ALEInterface::Impl {
         std::auto_ptr<RomSettings> m_rom_settings;
 
         reward_t m_episode_score; // Score accumulated throughout the course of an episode
+	reward_t m_episode_scoreB;
         bool m_display_active;    // Should the screen be displayed or not
         int m_max_num_frames;     // Maximum number of frames for each episode
 };
@@ -357,12 +365,20 @@ ActionVect ALEInterface::Impl::getMinimalActionSet() {
     return m_rom_settings->getMinimalActionSet();
 }
 
+ActionVect ALEInterface::Impl::getMinimalActionSetB() {
+
+    return m_rom_settings->getMinimalActionSetB();
+}
 
 ActionVect ALEInterface::Impl::getLegalActionSet() {
     
     return m_rom_settings->getAllActions();
 }
 
+ActionVect ALEInterface::Impl::getLegalActionSetB() {
+    
+    return m_rom_settings->getAllActionsB();
+}
 
 reward_t ALEInterface::Impl::minReward() const {
 
@@ -379,6 +395,10 @@ reward_t ALEInterface::Impl::maxReward() const {
 int ALEInterface::Impl::lives() const {
 
     return m_rom_settings->lives();
+}
+int ALEInterface::Impl::livesB() const {
+
+    return m_rom_settings->livesB();
 }
 
 
@@ -398,6 +418,23 @@ reward_t ALEInterface::Impl::act(Action action) {
         m_emu->osystem->p_display_screen->display_screen(m_emu->osystem->console().mediaSource());
 
     return reward;
+}
+
+void ALEInterface::Impl::act(Action actionA,Action actionB,double* rewardA,double* rewardB) {
+    m_emu->environment->act(actionA, actionB);
+    (*rewardA) = m_rom_settings->getReward();
+    (*rewardB) = m_rom_settings->getRewardB();
+
+    // sanity check rewards
+    assert((*rewardA) <= m_rom_settings->maxReward());
+    assert((*rewardA) >= m_rom_settings->minReward());
+    // sanity check rewards
+    assert((*rewardB) <= m_rom_settings->maxReward());
+    assert((*rewardB) >= m_rom_settings->minReward());
+    if (m_display_active)
+        m_emu->osystem->p_display_screen->display_screen(m_emu->osystem->console().mediaSource());
+	
+    
 }
 
 
@@ -519,11 +556,16 @@ ActionVect ALEInterface::getMinimalActionSet() {
     return m_pimpl->getMinimalActionSet();
 }
 
+ActionVect ALEInterface::getMinimalActionSetB() {
+    return m_pimpl->getMinimalActionSetB();
+}
 
 ActionVect ALEInterface::getLegalActionSet() {
     return m_pimpl->getLegalActionSet();
 }
-
+ActionVect ALEInterface::getLegalActionSetB() {
+    return m_pimpl->getLegalActionSetB();
+}
 
 reward_t ALEInterface::minReward() const {
     return m_pimpl->minReward();
@@ -538,12 +580,17 @@ reward_t ALEInterface::maxReward() const {
 int ALEInterface::lives() const {
     return m_pimpl->lives();
 }
-
+int ALEInterface::livesB() const {
+    return m_pimpl->livesB();
+}
 
 reward_t ALEInterface::act(Action action) {
     return m_pimpl->act(action);
 }
 
+void ALEInterface::act(Action actionA,Action actionB,double* rewardA, double* rewardB){
+     m_pimpl->act(actionA,actionB,rewardA, rewardB);
+}
 
 ALEInterface::ALEInterface(const std::string &rom_file) :
     m_pimpl(new ALEInterface::Impl(rom_file))
