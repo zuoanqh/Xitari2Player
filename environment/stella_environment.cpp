@@ -36,6 +36,7 @@
 #include "../emucore/m6502/src/System.hxx"
 #include <cstring>
 #include <unistd.h>
+#include <iostream>
 
 using namespace ale;
 
@@ -70,6 +71,7 @@ StellaEnvironment::StellaEnvironment(OSystem* osystem, RomSettings* settings):
 /** Resets the system to its start state. */
 void StellaEnvironment::reset() {
   // RNG for generating environments
+
   Random randGen;
 
   // Reset the paddles
@@ -84,20 +86,22 @@ void StellaEnvironment::reset() {
     noopSteps = 60 + rand() % NUM_RANDOM_ENVIRONMENTS;
   else
     noopSteps = 60;
-
+//bug
   emulate(PLAYER_A_NOOP, PLAYER_B_NOOP, noopSteps);
   // reset for n steps
-  emulate(RESET, PLAYER_B_NOOP, m_num_reset_steps);
 
+  emulate(RESET, PLAYER_B_NOOP, m_num_reset_steps);
+//bug
   // reset the rom (after emulating, in case the NOOPs led to reward)
   m_settings->reset();
-  
+
   // Apply necessary actions specified by the rom itself
   if (m_use_starting_actions) {
     ActionVect startingActions = m_settings->getStartingActions();
     for (size_t i = 0; i < startingActions.size(); i++)
       emulate(startingActions[i], PLAYER_B_NOOP);
   }
+
 }
 
 /** Save/restore the environment state. */
@@ -208,7 +212,7 @@ bool StellaEnvironment::isTerminal() const {
 
 void StellaEnvironment::emulate(Action player_a_action, Action player_b_action, size_t num_steps) {
   Event* event = m_osystem->event();
-  
+
   //std::cout << "m_use_paddles: " << m_use_paddles << std::endl;
 
   // Handle paddles separately: we have to manually update the paddle positions at each step
@@ -220,18 +224,24 @@ void StellaEnvironment::emulate(Action player_a_action, Action player_b_action, 
 
       m_osystem->console().mediaSource().update();
       m_settings->step(m_osystem->console().system());
+
     }
   }
   else {
+
     // In joystick mode we only need to set the action events once
     m_state.setActionJoysticks(event, player_a_action, player_b_action);
 
     for (size_t t = 0; t < num_steps; t++) {
+
       m_osystem->console().mediaSource().update();
+ std::cout << "Stella_Env:238" << std::endl;
+//bug
       m_settings->step(m_osystem->console().system());
+//bug std::cout << "fin" << std::endl;
     }
   }
-
+ 
   // Parse screen and RAM into their respective data structures
   processScreen();
   processRAM();

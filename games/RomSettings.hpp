@@ -38,7 +38,7 @@
 #include "../common/Constants.h"
 #include "../emucore/Serializer.hxx"
 #include "../emucore/Deserializer.hxx"
-
+#include <iostream>
 namespace ale {
 
 class System;

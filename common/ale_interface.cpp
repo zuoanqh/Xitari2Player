@@ -19,7 +19,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-
+#include <iostream>
 
 namespace ale {
 
@@ -162,8 +162,7 @@ class ALEInterface::Impl {
         // to check if the game has ended and reset when necessary - this method will keep pressing
         // buttons on the game over screen.
         reward_t act(Action action);
-
-	void act(Action actionA, Action actionB, double* rewardA, double* rewardB);
+        void act2(Action actionA, Action actionB, double* rewardA, double* rewardB);
 
         // Returns the vector of legal actions.
         ActionVect getLegalActionSet();
@@ -182,7 +181,6 @@ class ALEInterface::Impl {
 
         // The remaining number of lives.
         int lives() const;
-        // The remaining number of lives for player B.
         int livesB() const;
 
         // Returns the frame number since the loading of the ROM
@@ -260,10 +258,10 @@ ALEInterface::Impl::~Impl() {
 
 
 void ALEInterface::Impl::loadROM(const std::string &rom_file) {
+    
 
     // build the ROM settings object
     m_rom_settings.reset(buildRomRLWrapper(rom_file));
-
     // now build the emulator 
     m_emu.reset(new ALEInterface::Impl::Emulator());
 
@@ -294,7 +292,10 @@ void ALEInterface::Impl::loadROM(const std::string &rom_file) {
     delete [] argv;
 
     // now ready the game to play
+//bug
+    std::cout << "ale_interface.cpp:296" << std::endl;
     reset_game();
+//bug
 }
 
 
@@ -420,7 +421,7 @@ reward_t ALEInterface::Impl::act(Action action) {
     return reward;
 }
 
-void ALEInterface::Impl::act(Action actionA,Action actionB,double* rewardA,double* rewardB) {
+void ALEInterface::Impl::act2(Action actionA,Action actionB,double* rewardA,double* rewardB) {
     m_emu->environment->act(actionA, actionB);
     (*rewardA) = m_rom_settings->getReward();
     (*rewardB) = m_rom_settings->getRewardB();
@@ -588,8 +589,8 @@ reward_t ALEInterface::act(Action action) {
     return m_pimpl->act(action);
 }
 
-void ALEInterface::act(Action actionA,Action actionB,double* rewardA, double* rewardB){
-     m_pimpl->act(actionA,actionB,rewardA, rewardB);
+void ALEInterface::act2(Action actionA,Action actionB,double* rewardA, double* rewardB){
+     m_pimpl->act2(actionA,actionB,rewardA, rewardB);
 }
 
 ALEInterface::ALEInterface(const std::string &rom_file) :
