@@ -57,6 +57,7 @@
 #include "supported/ElevatorAction.hpp"
 #include "supported/Enduro.hpp"
 #include "supported/FishingDerby.hpp"
+#include "supported/FlapPing2Player.hpp"
 #include "supported/Freeway.hpp"
 #include "supported/Frostbite.hpp"
 #include "supported/Gopher.hpp"
@@ -88,6 +89,7 @@
 #include "supported/SpaceInvaders.hpp"
 #include "supported/StarGunner.hpp"
 #include "supported/Surround.hpp"
+#include "supported/Surround2Player.hpp"
 #include "supported/Tennis.hpp"
 #include "supported/TimePilot.hpp"
 #include "supported/Tutankham.hpp"
@@ -131,6 +133,7 @@ static const RomSettings *roms[]  = {
     new ElevatorActionSettings(),
     new EnduroSettings(),
     new FishingDerbySettings(),
+    new FlapPing2PlayerSettings(),
     new FreewaySettings(),
     new FrostbiteSettings(),
     new GopherSettings(),
@@ -162,6 +165,7 @@ static const RomSettings *roms[]  = {
     new SpaceInvadersSettings(),
     new StarGunnerSettings(),
     new SurroundSettings(),
+    new Surround2PlayerSettings(),
     new TennisSettings(),
     new TimePilotSettings(),
     new TutankhamSettings(),

@@ -33,7 +33,7 @@
  * *****************************************************************************
  */
 #include "RomSettings.hpp"
-
+#include <iostream>
 using namespace ale;
 
 bool RomSettings::isLegal(const Action& a) const {

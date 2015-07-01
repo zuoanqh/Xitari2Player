@@ -86,7 +86,7 @@ void StellaEnvironment::reset() {
     noopSteps = 60 + rand() % NUM_RANDOM_ENVIRONMENTS;
   else
     noopSteps = 60;
-//bug
+
   emulate(PLAYER_A_NOOP, PLAYER_B_NOOP, noopSteps);
   // reset for n steps
 
@@ -94,7 +94,7 @@ void StellaEnvironment::reset() {
 //bug
   // reset the rom (after emulating, in case the NOOPs led to reward)
   m_settings->reset();
-
+ 
   // Apply necessary actions specified by the rom itself
   if (m_use_starting_actions) {
     ActionVect startingActions = m_settings->getStartingActions();
@@ -174,7 +174,7 @@ void StellaEnvironment::noopIllegalActions(Action & player_a_action, Action & pl
     player_a_action = (Action)PLAYER_A_NOOP;
 
   if (player_b_action < (Action)PLAYER_B_MAX && 
-        !m_settings->isLegal(player_b_action)) {
+        !m_settings->isLegalB(player_b_action)) {
     player_b_action = (Action)PLAYER_B_NOOP;
   }
   else if (player_b_action == RESET) 
@@ -184,6 +184,7 @@ void StellaEnvironment::noopIllegalActions(Action & player_a_action, Action & pl
 /** Applies the given actions (e.g. updating paddle positions when the paddle is used)
   *  and performs one simulation step in Stella. */
 reward_t StellaEnvironment::act(Action player_a_action, Action player_b_action) {
+ // std::cout<< "StellaEnvironment::act187  "<<player_a_action << " " << player_b_action <<std::endl;
   // Once in a terminal state, refuse to go any further (special actions must be handled
   //  outside of this environment; in particular reset() should be called rather than passing
   //  RESET or SYSTEM_RESET.
@@ -192,7 +193,7 @@ reward_t StellaEnvironment::act(Action player_a_action, Action player_b_action) 
 
   // Convert illegal actions into NOOPs; actions such as reset are always legal
   noopIllegalActions(player_a_action, player_b_action);
-
+//std::cout<< "StellaEnvironment::act 196 "<<player_a_action << " " << player_b_action <<std::endl;
   //std::cout << "PLAYER_A: " << player_a_action << ", PLAYER_B: " << player_b_action << std::endl;
   
   // Emulate in the emulator
@@ -235,28 +236,34 @@ void StellaEnvironment::emulate(Action player_a_action, Action player_b_action, 
     for (size_t t = 0; t < num_steps; t++) {
 
       m_osystem->console().mediaSource().update();
- std::cout << "Stella_Env:238" << std::endl;
-//bug
+ 
+
       m_settings->step(m_osystem->console().system());
-//bug std::cout << "fin" << std::endl;
+
     }
   }
  
   // Parse screen and RAM into their respective data structures
+
   processScreen();
+
   processRAM();
+
 }
 
 /** Accessor methods for the environment state. */
 void StellaEnvironment::setState(const ALEState& state) {
+
   m_state = state;
 }
 
 const ALEState& StellaEnvironment::getState() const {
+
   return m_state;
 }
 
 void StellaEnvironment::processScreen() {
+
   if (!m_colour_averaging) {
     // Copy screen over and we're done! 
     int size = m_osystem->console().mediaSource().width() * m_osystem->console().mediaSource().height();
@@ -271,6 +278,7 @@ void StellaEnvironment::processScreen() {
 }
 
 void StellaEnvironment::processRAM() {
+
   // Copy RAM over
   for (size_t i = 0; i < m_ram.size(); i++) {
     unsigned int idx = static_cast<unsigned int>(i);

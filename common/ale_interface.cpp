@@ -228,7 +228,7 @@ class ALEInterface::Impl {
 
         struct Emulator {
 
-            Emulator() : osystem(NULL), settings(NULL), environment(NULL), runs(0) {}
+            Emulator() : osystem(NULL), settings(NULL), environment(NULL), runs(0) {    }
 
             OSystem           *osystem;
             Settings          *settings;
@@ -250,7 +250,6 @@ class ALEInterface::Impl {
 
 
 ALEInterface::Impl::~Impl() {
-
     if (m_emu->environment) delete m_emu->environment;
     if (m_emu->osystem)     delete m_emu->osystem;
     if (m_emu->settings)    delete m_emu->settings;
@@ -259,7 +258,6 @@ ALEInterface::Impl::~Impl() {
 
 void ALEInterface::Impl::loadROM(const std::string &rom_file) {
     
-
     // build the ROM settings object
     m_rom_settings.reset(buildRomRLWrapper(rom_file));
     // now build the emulator 
@@ -292,15 +290,13 @@ void ALEInterface::Impl::loadROM(const std::string &rom_file) {
     delete [] argv;
 
     // now ready the game to play
-//bug
-    std::cout << "ale_interface.cpp:296" << std::endl;
+
     reset_game();
-//bug
+
 }
 
 
 bool ALEInterface::Impl::loadState() {
-
     return m_emu->environment->load();
 }
 
@@ -311,7 +307,6 @@ bool ALEInterface::Impl::game_over() const {
 
 
 void ALEInterface::Impl::reset_game() {
-
     m_emu->environment->reset();
 }
 
@@ -321,7 +316,6 @@ void ALEInterface::Impl::saveState() {
 }
 
 std::string ALEInterface::Impl::getSnapshot() const{
-
     const ALEState* state = m_emu->environment->cloneState();
     std::string snapshot = state->getStateAsString();
     m_emu->environment->destroyState(state);
@@ -329,7 +323,6 @@ std::string ALEInterface::Impl::getSnapshot() const{
 }
 
 void ALEInterface::Impl::restoreSnapshot(const std::string &snapshot) {
-
     ALEState state(snapshot);
 
     m_emu->environment->restoreState(state);
@@ -422,10 +415,10 @@ reward_t ALEInterface::Impl::act(Action action) {
 }
 
 void ALEInterface::Impl::act2(Action actionA,Action actionB,double* rewardA,double* rewardB) {
+    
     m_emu->environment->act(actionA, actionB);
     (*rewardA) = m_rom_settings->getReward();
     (*rewardB) = m_rom_settings->getRewardB();
-
     // sanity check rewards
     assert((*rewardA) <= m_rom_settings->maxReward());
     assert((*rewardA) >= m_rom_settings->minReward());
@@ -460,7 +453,6 @@ const Settings &ALEInterface::Impl::settings() const {
 
 
 const RomSettings &ALEInterface::Impl::romSettings() const {
-
     return *m_rom_settings;
 }
 
@@ -527,7 +519,6 @@ std::string ALEInterface::getSnapshot() const {
 void ALEInterface::restoreSnapshot(const std::string& snapshot) {
     m_pimpl->restoreSnapshot(snapshot);
 }
-
 const ALERAM &ALEInterface::getRAM() const {
     return m_pimpl->getRAM();
 }
@@ -638,7 +629,7 @@ const ALEScreen &ALEScreen::operator=(const ALEScreen &rhs) {
 }
 
 
-ALERAM::ALERAM() { }
+ALERAM::ALERAM() {}
 
 
 ALERAM::ALERAM(const ALERAM &rhs) {

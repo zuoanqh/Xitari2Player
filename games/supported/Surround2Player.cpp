@@ -26,7 +26,7 @@
  *
  * *****************************************************************************
  */
-#include "Pong2Player.hpp"
+#include "Surround2Player.hpp"
 #include "ale_interface.hpp"
 #include "../RomUtils.hpp"
 #include <iostream>
@@ -34,27 +34,27 @@
 using namespace ale;
 
 
-Pong2PlayerSettings::Pong2PlayerSettings() {
+Surround2PlayerSettings::Surround2PlayerSettings() {
     reset();
 }
 
 
 /* create a new instance of the rom */
-RomSettings* Pong2PlayerSettings::clone() const { 
+RomSettings* Surround2PlayerSettings::clone() const { 
     
-    RomSettings* rval = new Pong2PlayerSettings();
+    RomSettings* rval = new Surround2PlayerSettings();
     *rval = *this;
     return rval;
 }
 
 
 /* process the latest information from ALE */
-void Pong2PlayerSettings::step(const System& system) {
-    int left = readRam(&system, 13); // left player score
-    int right = readRam(&system, 14); // right player score
+void Surround2PlayerSettings::step(const System& system) {
+    int Score = getDecimalScore(0xF6, &system); 
+    int ScoreB = getDecimalScore(0xF7, &system);
     // The RL score is the difference in scores
-    int newScore = left-right;
-    int newScoreB = right-left;
+    int newScore = Score-ScoreB;
+    int newScoreB = ScoreB-Score;
 
     m_reward = newScore - m_score;
     m_rewardB = newScoreB - m_scoreB;
@@ -63,68 +63,72 @@ void Pong2PlayerSettings::step(const System& system) {
 
     if(m_reward!=0){
     }
-    // The game ends when we reach 21 points
-    m_terminal = (left == 21 || right == 21); 
+    // The game ends when we reach 10 points
+    m_terminal = (Score == 10 || ScoreB == 10); 
 }
 
 
 /* is end of game */
-bool Pong2PlayerSettings::isTerminal() const {
+bool Surround2PlayerSettings::isTerminal() const {
 
     return m_terminal;
 };
 
 
 /* get the most recently observed reward */
-reward_t Pong2PlayerSettings::getReward() const { 
+reward_t Surround2PlayerSettings::getReward() const { 
 
     if(m_reward!=0){
-    std::cout<< "\n\n\n-----------------PongGetRewrd rewardA  "<<m_reward << "rewardB" << m_rewardB <<"--------------"<<std::endl;
+    std::cout<< "\n\n\n-----------------SurroundGetRewrd rewardA  "<<m_reward << "rewardB" << m_rewardB <<"--------------"<<std::endl;
     }
     return m_reward; 
 }
 /* get the most recently observed reward */
-reward_t Pong2PlayerSettings::getRewardB() const { 
+reward_t Surround2PlayerSettings::getRewardB() const { 
 
     return m_rewardB; 
 }
 
 
-bool Pong2PlayerSettings::isLegal(const Action& a) const {
+bool Surround2PlayerSettings::isLegal(const Action& a) const {
     switch (a) {
         // left player
         case PLAYER_A_NOOP:
         case PLAYER_A_FIRE:
         case PLAYER_A_RIGHT:
         case PLAYER_A_LEFT:
+        case PLAYER_A_UP:
+        case PLAYER_A_DOWN:
             return true;
         default:
             return false;
     }   
 }
 
-bool Pong2PlayerSettings::isLegalB(const Action& a) const {
+bool Surround2PlayerSettings::isLegalB(const Action& a) const {
     switch (a) {
         // left player
         case PLAYER_B_NOOP:
         case PLAYER_B_FIRE:
         case PLAYER_B_RIGHT:
         case PLAYER_B_LEFT:
+        case PLAYER_B_UP:
+        case PLAYER_B_DOWN:
             return true;
         default:
             return false;
     }   
 }
 /* is an action part of the minimal set? */
-bool Pong2PlayerSettings::isMinimal(const Action &a) const {
+bool Surround2PlayerSettings::isMinimal(const Action &a) const {
     return true; // all legal actions are minimal
 }
-bool Pong2PlayerSettings::isMinimalB(const Action &a) const {
+bool Surround2PlayerSettings::isMinimalB(const Action &a) const {
     return true; // all legal actions are minimal
 }
 
 /* reset the state of the game */
-void Pong2PlayerSettings::reset() {
+void Surround2PlayerSettings::reset() {
     
     m_reward   = 0;
     m_rewardB  = 0;
@@ -135,7 +139,7 @@ void Pong2PlayerSettings::reset() {
 
         
 /* saves the state of the rom settings */
-void Pong2PlayerSettings::saveState(Serializer & ser) {
+void Surround2PlayerSettings::saveState(Serializer & ser) {
   ser.putInt(m_reward);
   ser.putInt(m_score);
   ser.putInt(m_rewardB);
@@ -144,7 +148,7 @@ void Pong2PlayerSettings::saveState(Serializer & ser) {
 }
 
 // loads the state of the rom settings
-void Pong2PlayerSettings::loadState(Deserializer & ser) {
+void Surround2PlayerSettings::loadState(Deserializer & ser) {
   m_reward = ser.getInt();
   m_score = ser.getInt();
   m_rewardB = ser.getInt();
@@ -152,7 +156,7 @@ void Pong2PlayerSettings::loadState(Deserializer & ser) {
   m_terminal = ser.getBool();
 }
 
-ActionVect Pong2PlayerSettings::getStartingActions() {
+ActionVect Surround2PlayerSettings::getStartingActions() {
 
     // This is allocated here rather than once per instantiation to ensure thread safety 
     ActionVect vec;
