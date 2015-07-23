@@ -26,7 +26,7 @@
  *
  * *****************************************************************************
  */
-#include "Pong2Player.hpp"
+#include "Pong2PlayerVS.hpp"
 #include "ale_interface.hpp"
 #include "../RomUtils.hpp"
 #include <iostream>
@@ -34,32 +34,32 @@
 using namespace ale;
 
 
-Pong2PlayerSettings::Pong2PlayerSettings() {
+Pong2PlayerVSSettings::Pong2PlayerVSSettings() {
     reset();
 }
 
 
 /* create a new instance of the rom */
-RomSettings* Pong2PlayerSettings::clone() const { 
+RomSettings* Pong2PlayerVSSettings::clone() const { 
     
-    RomSettings* rval = new Pong2PlayerSettings();
+    RomSettings* rval = new Pong2PlayerVSSettings();
     *rval = *this;
     return rval;
 }
 
 
 /* process the latest information from ALE */
-void Pong2PlayerSettings::step(const System& system) {
+void Pong2PlayerVSSettings::step(const System& system) {
     int left = readRam(&system, 13); // left player score
     int right = readRam(&system, 14); // right player score
     // The RL score is the difference in scores
-    int newScore = -(left+right);
-    
+    int newScore = right-left;
+    int newScoreB = left-right;
 
     m_reward = newScore - m_score;
-    m_rewardB = m_reward;
+    m_rewardB = newScoreB - m_scoreB;
     m_score = newScore;
-    m_scoreB = newScore;
+    m_scoreB = newScoreB;
 
     if(m_reward!=0){
     }
@@ -69,14 +69,14 @@ void Pong2PlayerSettings::step(const System& system) {
 
 
 /* is end of game */
-bool Pong2PlayerSettings::isTerminal() const {
+bool Pong2PlayerVSSettings::isTerminal() const {
 
     return m_terminal;
 };
 
 
 /* get the most recently observed reward */
-reward_t Pong2PlayerSettings::getReward() const { 
+reward_t Pong2PlayerVSSettings::getReward() const { 
 
     if(m_reward!=0){
     //std::cout<< "\n\n\n-----------------PongGetRewrd rewardA  "<<m_reward << "rewardB" << m_rewardB <<"--------------"<<std::endl;
@@ -84,13 +84,13 @@ reward_t Pong2PlayerSettings::getReward() const {
     return m_reward; 
 }
 /* get the most recently observed reward */
-reward_t Pong2PlayerSettings::getRewardB() const { 
+reward_t Pong2PlayerVSSettings::getRewardB() const { 
 
     return m_rewardB; 
 }
 
 
-bool Pong2PlayerSettings::isLegal(const Action& a) const {
+bool Pong2PlayerVSSettings::isLegal(const Action& a) const {
     switch (a) {
         // right player
         case PLAYER_A_NOOP:
@@ -103,11 +103,11 @@ bool Pong2PlayerSettings::isLegal(const Action& a) const {
     }   
 }
 
-bool Pong2PlayerSettings::isLegalB(const Action& a) const {
+bool Pong2PlayerVSSettings::isLegalB(const Action& a) const {
     switch (a) {
         // left player
-        case PLAYER_B_NOOP:
-        case PLAYER_B_FIRE:
+       case PLAYER_B_NOOP:
+       case PLAYER_B_FIRE:
        case PLAYER_B_RIGHT:
        case PLAYER_B_LEFT:
             return true;
@@ -116,15 +116,15 @@ bool Pong2PlayerSettings::isLegalB(const Action& a) const {
     }   
 }
 /* is an action part of the minimal set? */
-bool Pong2PlayerSettings::isMinimal(const Action &a) const {
+bool Pong2PlayerVSSettings::isMinimal(const Action &a) const {
     return true; // all legal actions are minimal
 }
-bool Pong2PlayerSettings::isMinimalB(const Action &a) const {
+bool Pong2PlayerVSSettings::isMinimalB(const Action &a) const {
                return true; 
 }
 
 /* reset the state of the game */
-void Pong2PlayerSettings::reset() {
+void Pong2PlayerVSSettings::reset() {
     
     m_reward   = 0;
     m_rewardB  = 0;
@@ -135,7 +135,7 @@ void Pong2PlayerSettings::reset() {
 
         
 /* saves the state of the rom settings */
-void Pong2PlayerSettings::saveState(Serializer & ser) {
+void Pong2PlayerVSSettings::saveState(Serializer & ser) {
   ser.putInt(m_reward);
   ser.putInt(m_score);
   ser.putInt(m_rewardB);
@@ -144,7 +144,7 @@ void Pong2PlayerSettings::saveState(Serializer & ser) {
 }
 
 // loads the state of the rom settings
-void Pong2PlayerSettings::loadState(Deserializer & ser) {
+void Pong2PlayerVSSettings::loadState(Deserializer & ser) {
   m_reward = ser.getInt();
   m_score = ser.getInt();
   m_rewardB = ser.getInt();
@@ -152,7 +152,7 @@ void Pong2PlayerSettings::loadState(Deserializer & ser) {
   m_terminal = ser.getBool();
 }
 
-ActionVect Pong2PlayerSettings::getStartingActions() {
+ActionVect Pong2PlayerVSSettings::getStartingActions() {
 
     ActionVect startingActions;
     startingActions.push_back(SELECT);
