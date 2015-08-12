@@ -91,7 +91,7 @@ void StellaEnvironment::reset() {
   // reset for n steps
 
   emulate(RESET, PLAYER_B_NOOP, m_num_reset_steps);
-//bug
+
   // reset the rom (after emulating, in case the NOOPs led to reward)
   m_settings->reset();
  
@@ -184,7 +184,7 @@ void StellaEnvironment::noopIllegalActions(Action & player_a_action, Action & pl
 /** Applies the given actions (e.g. updating paddle positions when the paddle is used)
   *  and performs one simulation step in Stella. */
 reward_t StellaEnvironment::act(Action player_a_action, Action player_b_action) {
- // std::cout<< "StellaEnvironment::act187  "<<player_a_action << " " << player_b_action <<std::endl;
+ 
   // Once in a terminal state, refuse to go any further (special actions must be handled
   //  outside of this environment; in particular reset() should be called rather than passing
   //  RESET or SYSTEM_RESET.
@@ -193,8 +193,7 @@ reward_t StellaEnvironment::act(Action player_a_action, Action player_b_action) 
 
   // Convert illegal actions into NOOPs; actions such as reset are always legal
   noopIllegalActions(player_a_action, player_b_action);
-//std::cout<< "StellaEnvironment::act 196 "<<player_a_action << " " << player_b_action <<std::endl;
-  //std::cout << "PLAYER_A: " << player_a_action << ", PLAYER_B: " << player_b_action << std::endl;
+
   
   // Emulate in the emulator
   emulate(player_a_action, player_b_action);
@@ -214,7 +213,7 @@ bool StellaEnvironment::isTerminal() const {
 void StellaEnvironment::emulate(Action player_a_action, Action player_b_action, size_t num_steps) {
   Event* event = m_osystem->event();
 
-  //std::cout << "m_use_paddles: " << m_use_paddles << std::endl;
+  
 
   // Handle paddles separately: we have to manually update the paddle positions at each step
   if (m_use_paddles) {

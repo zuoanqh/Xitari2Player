@@ -78,6 +78,8 @@
 #include "supported/Pong.hpp"
 #include "supported/Pong2Player.hpp"
 #include "supported/Pong2PlayerVS.hpp"
+#include "supported/Pong2Player0.hpp"
+#include "supported/Pong2Player05.hpp"
 #include "supported/Pooyan.hpp"
 #include "supported/PrivateEye.hpp"
 #include "supported/QBert.hpp"
@@ -155,6 +157,8 @@ static const RomSettings *roms[]  = {
     new PongSettings(),
     new Pong2PlayerSettings(),
     new Pong2PlayerVSSettings(),
+    new Pong2Player0Settings(),
+    new Pong2Player05Settings(),
     new PooyanSettings(),
     new PrivateEyeSettings(),
     new QBertSettings(),
