@@ -26,19 +26,19 @@
  *
  * *****************************************************************************
  */
-#ifndef __Surround2Player_HPP__
-#define __Surround2Player_HPP__
+#ifndef __Pong2Player05_HPP__
+#define __Pong2Player05_HPP__
 
 #include "../RomSettings.hpp"
 
 namespace ale {
 
 // RL wrapper for SpaceInvaders
-class Surround2PlayerSettings : public RomSettings {
+class Pong2Player05Settings : public RomSettings {
 
     public:
 
-        Surround2PlayerSettings();
+        Pong2Player05Settings();
 
         // reset
         void reset();
@@ -48,19 +48,19 @@ class Surround2PlayerSettings : public RomSettings {
 
         // get the most recently observed reward
         reward_t getReward() const;
-
+	reward_t getRewardB() const;
         // the rom-name
-        const char* rom() const { return "surround_2player"; }
+        const char* rom() const { return "Pong2Player05"; }
 
         // create a new instance of the rom
         RomSettings* clone() const;
 
 		// is an action legal?
         bool isLegal(const Action& a) const;
-
+        bool isLegalB(const Action& a) const;
         // is an action part of the minimal set?
         bool isMinimal(const Action& a) const;
-
+        bool isMinimalB(const Action& a) const;
         // process the latest information from ALE
         void step(const System& system);
 		
@@ -74,7 +74,7 @@ class Surround2PlayerSettings : public RomSettings {
         void loadState(Deserializer & ser);
 
         virtual int lives() const { return 0; }
-
+        virtual int livesB() const { return 0; }
         ActionVect getStartingActions();
 
     private:
@@ -82,9 +82,11 @@ class Surround2PlayerSettings : public RomSettings {
         bool m_terminal;
         reward_t m_reward;
         reward_t m_score;
+        reward_t m_rewardB;
+        reward_t m_scoreB;
 };
 
 } // namespace ale
 
-#endif // __Surround2Player_HPP__
+#endif // __Pong2Player05_HPP__
 

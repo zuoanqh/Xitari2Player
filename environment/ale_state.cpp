@@ -35,7 +35,7 @@
 #include "common/Constants.h"
 #include "archive_binary_in.hpp"
 #include "archive_binary_out.hpp"
-
+#include <iostream>
 
 using namespace ale;
 

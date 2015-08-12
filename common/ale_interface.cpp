@@ -19,7 +19,7 @@
 #include <vector>
 #include <sstream>
 #include <algorithm>
-
+#include <iostream>
 
 namespace ale {
 
@@ -162,13 +162,17 @@ class ALEInterface::Impl {
         // to check if the game has ended and reset when necessary - this method will keep pressing
         // buttons on the game over screen.
         reward_t act(Action action);
+        void act2(Action actionA, Action actionB, double* rewardA, double* rewardB);
 
         // Returns the vector of legal actions.
         ActionVect getLegalActionSet();
+        ActionVect getLegalActionSetB();
+
+
 
         // Returns the vector of the minimal set of actions needed to play the game.
         ActionVect getMinimalActionSet();
-
+	ActionVect getMinimalActionSetB();
         // Minimum possible instantaneous reward.
         reward_t minReward() const;
 
@@ -177,6 +181,7 @@ class ALEInterface::Impl {
 
         // The remaining number of lives.
         int lives() const;
+        int livesB() const;
 
         // Returns the frame number since the loading of the ROM
         int getFrameNumber() const;
@@ -223,7 +228,7 @@ class ALEInterface::Impl {
 
         struct Emulator {
 
-            Emulator() : osystem(NULL), settings(NULL), environment(NULL), runs(0) {}
+            Emulator() : osystem(NULL), settings(NULL), environment(NULL), runs(0) {    }
 
             OSystem           *osystem;
             Settings          *settings;
@@ -238,13 +243,13 @@ class ALEInterface::Impl {
         std::auto_ptr<RomSettings> m_rom_settings;
 
         reward_t m_episode_score; // Score accumulated throughout the course of an episode
+	reward_t m_episode_scoreB;
         bool m_display_active;    // Should the screen be displayed or not
         int m_max_num_frames;     // Maximum number of frames for each episode
 };
 
 
 ALEInterface::Impl::~Impl() {
-
     if (m_emu->environment) delete m_emu->environment;
     if (m_emu->osystem)     delete m_emu->osystem;
     if (m_emu->settings)    delete m_emu->settings;
@@ -252,10 +257,9 @@ ALEInterface::Impl::~Impl() {
 
 
 void ALEInterface::Impl::loadROM(const std::string &rom_file) {
-
+    
     // build the ROM settings object
     m_rom_settings.reset(buildRomRLWrapper(rom_file));
-
     // now build the emulator 
     m_emu.reset(new ALEInterface::Impl::Emulator());
 
@@ -286,12 +290,13 @@ void ALEInterface::Impl::loadROM(const std::string &rom_file) {
     delete [] argv;
 
     // now ready the game to play
+
     reset_game();
+
 }
 
 
 bool ALEInterface::Impl::loadState() {
-
     return m_emu->environment->load();
 }
 
@@ -302,7 +307,6 @@ bool ALEInterface::Impl::game_over() const {
 
 
 void ALEInterface::Impl::reset_game() {
-
     m_emu->environment->reset();
 }
 
@@ -312,7 +316,6 @@ void ALEInterface::Impl::saveState() {
 }
 
 std::string ALEInterface::Impl::getSnapshot() const{
-
     const ALEState* state = m_emu->environment->cloneState();
     std::string snapshot = state->getStateAsString();
     m_emu->environment->destroyState(state);
@@ -320,7 +323,6 @@ std::string ALEInterface::Impl::getSnapshot() const{
 }
 
 void ALEInterface::Impl::restoreSnapshot(const std::string &snapshot) {
-
     ALEState state(snapshot);
 
     m_emu->environment->restoreState(state);
@@ -357,12 +359,20 @@ ActionVect ALEInterface::Impl::getMinimalActionSet() {
     return m_rom_settings->getMinimalActionSet();
 }
 
+ActionVect ALEInterface::Impl::getMinimalActionSetB() {
+
+    return m_rom_settings->getMinimalActionSetB();
+}
 
 ActionVect ALEInterface::Impl::getLegalActionSet() {
     
     return m_rom_settings->getAllActions();
 }
 
+ActionVect ALEInterface::Impl::getLegalActionSetB() {
+    
+    return m_rom_settings->getAllActionsB();
+}
 
 reward_t ALEInterface::Impl::minReward() const {
 
@@ -379,6 +389,10 @@ reward_t ALEInterface::Impl::maxReward() const {
 int ALEInterface::Impl::lives() const {
 
     return m_rom_settings->lives();
+}
+int ALEInterface::Impl::livesB() const {
+
+    return m_rom_settings->livesB();
 }
 
 
@@ -398,6 +412,23 @@ reward_t ALEInterface::Impl::act(Action action) {
         m_emu->osystem->p_display_screen->display_screen(m_emu->osystem->console().mediaSource());
 
     return reward;
+}
+
+void ALEInterface::Impl::act2(Action actionA,Action actionB,double* rewardA,double* rewardB) {
+    
+    m_emu->environment->act(actionA, actionB);
+    (*rewardA) = m_rom_settings->getReward();
+    (*rewardB) = m_rom_settings->getRewardB();
+    // sanity check rewards
+    assert((*rewardA) <= m_rom_settings->maxReward());
+    assert((*rewardA) >= m_rom_settings->minReward());
+    // sanity check rewards
+    assert((*rewardB) <= m_rom_settings->maxReward());
+    assert((*rewardB) >= m_rom_settings->minReward());
+    if (m_display_active)
+        m_emu->osystem->p_display_screen->display_screen(m_emu->osystem->console().mediaSource());
+	
+    
 }
 
 
@@ -422,7 +453,6 @@ const Settings &ALEInterface::Impl::settings() const {
 
 
 const RomSettings &ALEInterface::Impl::romSettings() const {
-
     return *m_rom_settings;
 }
 
@@ -489,7 +519,6 @@ std::string ALEInterface::getSnapshot() const {
 void ALEInterface::restoreSnapshot(const std::string& snapshot) {
     m_pimpl->restoreSnapshot(snapshot);
 }
-
 const ALERAM &ALEInterface::getRAM() const {
     return m_pimpl->getRAM();
 }
@@ -519,11 +548,16 @@ ActionVect ALEInterface::getMinimalActionSet() {
     return m_pimpl->getMinimalActionSet();
 }
 
+ActionVect ALEInterface::getMinimalActionSetB() {
+    return m_pimpl->getMinimalActionSetB();
+}
 
 ActionVect ALEInterface::getLegalActionSet() {
     return m_pimpl->getLegalActionSet();
 }
-
+ActionVect ALEInterface::getLegalActionSetB() {
+    return m_pimpl->getLegalActionSetB();
+}
 
 reward_t ALEInterface::minReward() const {
     return m_pimpl->minReward();
@@ -538,12 +572,17 @@ reward_t ALEInterface::maxReward() const {
 int ALEInterface::lives() const {
     return m_pimpl->lives();
 }
-
+int ALEInterface::livesB() const {
+    return m_pimpl->livesB();
+}
 
 reward_t ALEInterface::act(Action action) {
     return m_pimpl->act(action);
 }
 
+void ALEInterface::act2(Action actionA,Action actionB,double* rewardA, double* rewardB){
+     m_pimpl->act2(actionA,actionB,rewardA, rewardB);
+}
 
 ALEInterface::ALEInterface(const std::string &rom_file) :
     m_pimpl(new ALEInterface::Impl(rom_file))
@@ -590,7 +629,7 @@ const ALEScreen &ALEScreen::operator=(const ALEScreen &rhs) {
 }
 
 
-ALERAM::ALERAM() { }
+ALERAM::ALERAM() {}
 
 
 ALERAM::ALERAM(const ALERAM &rhs) {

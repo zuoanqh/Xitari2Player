@@ -36,6 +36,7 @@
 #include "../emucore/m6502/src/System.hxx"
 #include <cstring>
 #include <unistd.h>
+#include <iostream>
 
 using namespace ale;
 
@@ -70,6 +71,7 @@ StellaEnvironment::StellaEnvironment(OSystem* osystem, RomSettings* settings):
 /** Resets the system to its start state. */
 void StellaEnvironment::reset() {
   // RNG for generating environments
+
   Random randGen;
 
   // Reset the paddles
@@ -87,17 +89,19 @@ void StellaEnvironment::reset() {
 
   emulate(PLAYER_A_NOOP, PLAYER_B_NOOP, noopSteps);
   // reset for n steps
+
   emulate(RESET, PLAYER_B_NOOP, m_num_reset_steps);
 
   // reset the rom (after emulating, in case the NOOPs led to reward)
   m_settings->reset();
-  
+ 
   // Apply necessary actions specified by the rom itself
   if (m_use_starting_actions) {
     ActionVect startingActions = m_settings->getStartingActions();
     for (size_t i = 0; i < startingActions.size(); i++)
       emulate(startingActions[i], PLAYER_B_NOOP);
   }
+
 }
 
 /** Save/restore the environment state. */
@@ -170,7 +174,7 @@ void StellaEnvironment::noopIllegalActions(Action & player_a_action, Action & pl
     player_a_action = (Action)PLAYER_A_NOOP;
 
   if (player_b_action < (Action)PLAYER_B_MAX && 
-        !m_settings->isLegal(player_b_action)) {
+        !m_settings->isLegalB(player_b_action)) {
     player_b_action = (Action)PLAYER_B_NOOP;
   }
   else if (player_b_action == RESET) 
@@ -180,6 +184,7 @@ void StellaEnvironment::noopIllegalActions(Action & player_a_action, Action & pl
 /** Applies the given actions (e.g. updating paddle positions when the paddle is used)
   *  and performs one simulation step in Stella. */
 reward_t StellaEnvironment::act(Action player_a_action, Action player_b_action) {
+ 
   // Once in a terminal state, refuse to go any further (special actions must be handled
   //  outside of this environment; in particular reset() should be called rather than passing
   //  RESET or SYSTEM_RESET.
@@ -189,7 +194,6 @@ reward_t StellaEnvironment::act(Action player_a_action, Action player_b_action) 
   // Convert illegal actions into NOOPs; actions such as reset are always legal
   noopIllegalActions(player_a_action, player_b_action);
 
-  //std::cout << "PLAYER_A: " << player_a_action << ", PLAYER_B: " << player_b_action << std::endl;
   
   // Emulate in the emulator
   emulate(player_a_action, player_b_action);
@@ -208,8 +212,8 @@ bool StellaEnvironment::isTerminal() const {
 
 void StellaEnvironment::emulate(Action player_a_action, Action player_b_action, size_t num_steps) {
   Event* event = m_osystem->event();
+
   
-  //std::cout << "m_use_paddles: " << m_use_paddles << std::endl;
 
   // Handle paddles separately: we have to manually update the paddle positions at each step
   if (m_use_paddles) {
@@ -220,33 +224,45 @@ void StellaEnvironment::emulate(Action player_a_action, Action player_b_action, 
 
       m_osystem->console().mediaSource().update();
       m_settings->step(m_osystem->console().system());
+
     }
   }
   else {
+
     // In joystick mode we only need to set the action events once
     m_state.setActionJoysticks(event, player_a_action, player_b_action);
 
     for (size_t t = 0; t < num_steps; t++) {
+
       m_osystem->console().mediaSource().update();
+ 
+
       m_settings->step(m_osystem->console().system());
+
     }
   }
-
+ 
   // Parse screen and RAM into their respective data structures
+
   processScreen();
+
   processRAM();
+
 }
 
 /** Accessor methods for the environment state. */
 void StellaEnvironment::setState(const ALEState& state) {
+
   m_state = state;
 }
 
 const ALEState& StellaEnvironment::getState() const {
+
   return m_state;
 }
 
 void StellaEnvironment::processScreen() {
+
   if (!m_colour_averaging) {
     // Copy screen over and we're done! 
     int size = m_osystem->console().mediaSource().width() * m_osystem->console().mediaSource().height();
@@ -261,6 +277,7 @@ void StellaEnvironment::processScreen() {
 }
 
 void StellaEnvironment::processRAM() {
+
   // Copy RAM over
   for (size_t i = 0; i < m_ram.size(); i++) {
     unsigned int idx = static_cast<unsigned int>(i);

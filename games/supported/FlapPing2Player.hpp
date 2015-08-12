@@ -1,3 +1,5 @@
+
+
 /* *****************************************************************************
  * Xitari
  *
@@ -26,19 +28,19 @@
  *
  * *****************************************************************************
  */
-#ifndef __Pong2Player_HPP__
-#define __Pong2Player_HPP__
+#ifndef __FLAPPING_2PLAYER_HPP__
+#define __FLAPPING_2PLAYER_HPP__
 
 #include "../RomSettings.hpp"
 
 namespace ale {
 
-// RL wrapper for SpaceInvaders
-class Pong2PlayerSettings : public RomSettings {
-
+/* RL wrapper for FlapPing */
+class FlapPing2PlayerSettings : public RomSettings {
+    
     public:
 
-        Pong2PlayerSettings();
+        FlapPing2PlayerSettings();
 
         // reset
         void reset();
@@ -48,24 +50,21 @@ class Pong2PlayerSettings : public RomSettings {
 
         // get the most recently observed reward
         reward_t getReward() const;
-	reward_t getRewardB() const;
+
         // the rom-name
-        const char* rom() const { return "Pong2Player"; }
+        const char* rom() const { return "FlapPing2player"; }
 
         // create a new instance of the rom
         RomSettings* clone() const;
 
-		// is an action legal?
+        // is an action legal?
         bool isLegal(const Action& a) const;
-        bool isLegalB(const Action& a) const;
+
         // is an action part of the minimal set?
         bool isMinimal(const Action& a) const;
-        bool isMinimalB(const Action& a) const;
+
         // process the latest information from ALE
         void step(const System& system);
-		
-	// we need to lower the episode length further for Pong
-        //virtual int maxFrames() const;
 
         // saves the state of the rom settings
         void saveState(Serializer & ser);
@@ -73,20 +72,20 @@ class Pong2PlayerSettings : public RomSettings {
         // loads the state of the rom settings
         void loadState(Deserializer & ser);
 
-        virtual int lives() const { return 0; }
-        virtual int livesB() const { return 0; }
+        // remaining lives
+        int lives() const { return isTerminal() ? 0 : m_lives; }
+
         ActionVect getStartingActions();
 
     private:
 
         bool m_terminal;
+        bool m_started;
         reward_t m_reward;
         reward_t m_score;
-        reward_t m_rewardB;
-        reward_t m_scoreB;
+        int m_lives;
 };
 
 } // namespace ale
 
-#endif // __Pong2Player_HPP__
-
+#endif // __FLAPPING_2PLAYER_HPP__

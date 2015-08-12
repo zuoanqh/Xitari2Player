@@ -57,6 +57,7 @@
 #include "supported/ElevatorAction.hpp"
 #include "supported/Enduro.hpp"
 #include "supported/FishingDerby.hpp"
+#include "supported/FlapPing2Player.hpp"
 #include "supported/Freeway.hpp"
 #include "supported/Frostbite.hpp"
 #include "supported/Gopher.hpp"
@@ -76,6 +77,9 @@
 #include "supported/Pitfall.hpp"
 #include "supported/Pong.hpp"
 #include "supported/Pong2Player.hpp"
+#include "supported/Pong2PlayerVS.hpp"
+#include "supported/Pong2Player0.hpp"
+#include "supported/Pong2Player05.hpp"
 #include "supported/Pooyan.hpp"
 #include "supported/PrivateEye.hpp"
 #include "supported/QBert.hpp"
@@ -132,6 +136,7 @@ static const RomSettings *roms[]  = {
     new ElevatorActionSettings(),
     new EnduroSettings(),
     new FishingDerbySettings(),
+    new FlapPing2PlayerSettings(),
     new FreewaySettings(),
     new FrostbiteSettings(),
     new GopherSettings(),
@@ -151,6 +156,9 @@ static const RomSettings *roms[]  = {
     new PitfallSettings(),
     new PongSettings(),
     new Pong2PlayerSettings(),
+    new Pong2PlayerVSSettings(),
+    new Pong2Player0Settings(),
+    new Pong2Player05Settings(),
     new PooyanSettings(),
     new PrivateEyeSettings(),
     new QBertSettings(),

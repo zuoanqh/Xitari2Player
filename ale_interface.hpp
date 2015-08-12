@@ -204,12 +204,16 @@ class ALEInterface {
             buttons on the game over screen. */
         reward_t act(Action action);
 
+	void act2(Action actionA, Action actionB, double* rewardA, double* rewardB);
+
+
         /** Returns the vector of legal actions. */
         ActionVect getLegalActionSet();
+	ActionVect getLegalActionSetB(); 
 
         /** Returns a vector describing the minimal set of actions needed to play current game. */
         ActionVect getMinimalActionSet();
-
+        ActionVect getMinimalActionSetB();
         /** Returns the frame number since the loading of the ROM. */
         int getFrameNumber() const;
 
@@ -224,6 +228,7 @@ class ALEInterface {
 
         /** The remaining number of lives. */
         int lives() const;
+        int livesB() const;
 
         /** Returns the frame number since the start of the current episode. */
         int getEpisodeFrameNumber() const;
@@ -272,7 +277,7 @@ class ALEInterface {
 
         /** Copying is explicitly disallowed. */
         ALEInterface(const ALEInterface &);
-
+  
         /** Assignment is explicitly disallowed. */
         ALEInterface &operator=(const ALEInterface &);
 
