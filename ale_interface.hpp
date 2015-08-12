@@ -105,7 +105,7 @@ enum Action {
 typedef std::vector<Action> ActionVect;
 
 // type used to represent insantanteous reward
-typedef int reward_t;
+typedef double reward_t;
 
 typedef unsigned char byte_t;
 typedef unsigned char pixel_t;
