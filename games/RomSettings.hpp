@@ -60,6 +60,11 @@ struct RomSettings {
     //
     virtual reward_t getRewardB () const {return 0;};
 
+    virtual double getSideBouncing () const {return 0;};
+    virtual bool getWallBouncing () const {return false;};
+    virtual bool getCrash () const {return false;};
+    virtual bool getServing () const {return false;};
+    virtual int getPoints () const {return 0;};
     // the rom-name
     virtual const char *rom() const = 0;
 

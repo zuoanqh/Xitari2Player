@@ -60,6 +60,11 @@ void Pong2Player05Settings::step(const System& system) {
     m_rewardB = newScoreB - m_scoreB;
     m_score = newScore;
     m_scoreB = newScoreB;
+    points=left+right;
+    sideBouncing=readRam(&system, 0x91);
+    wallBouncing=readRam(&system, 0x94)==128;
+    crash=readRam(&system, 0x90)==0;
+    serving=readRam(&system, 0xB6)==0;
     if (m_reward==-1) {m_rewardB=-0.5;}
     else if(m_rewardB==-1){m_reward=-0.5;}  
 
@@ -86,8 +91,30 @@ reward_t Pong2Player05Settings::getRewardB() const {
 
     return m_rewardB; 
 }
+double Pong2Player05Settings::getSideBouncing() const { 
+
+    return sideBouncing; 
+}
 
 
+
+bool Pong2Player05Settings::getWallBouncing() const { 
+
+    return wallBouncing; 
+}
+
+int Pong2Player05Settings::getPoints() const { 
+
+    return points; 
+}
+bool Pong2Player05Settings::getCrash() const { 
+
+    return crash; 
+}
+bool Pong2Player05Settings::getServing() const { 
+
+    return serving; 
+}
 bool Pong2Player05Settings::isLegal(const Action& a) const {
     switch (a) {
         // right player

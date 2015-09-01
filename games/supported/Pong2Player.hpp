@@ -49,6 +49,13 @@ class Pong2PlayerSettings : public RomSettings {
         // get the most recently observed reward
         reward_t getReward() const;
 	reward_t getRewardB() const;
+
+
+        double getSideBouncing() const;
+        bool getWallBouncing() const;
+        bool getCrash() const;
+        bool getServing()const;
+        int getPoints() const;
         // the rom-name
         const char* rom() const { return "Pong2Player"; }
 
@@ -84,6 +91,11 @@ class Pong2PlayerSettings : public RomSettings {
         reward_t m_score;
         reward_t m_rewardB;
         reward_t m_scoreB;
+        double sideBouncing;
+        bool wallBouncing;
+        int points;
+        bool crash;
+        bool serving;
 };
 
 } // namespace ale

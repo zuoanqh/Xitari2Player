@@ -37,8 +37,8 @@
 #include "supported/Pong2PlayerVS.hpp"
 #include "supported/Pong2Player0.hpp"
 #include "supported/Pong2Player05.hpp"
-
-
+#include "supported/Pong2Player025.hpp"
+#include "supported/Pong2Player075.hpp"
 
 using namespace ale;
 
@@ -49,6 +49,8 @@ static const RomSettings *roms[]  = {
     new Pong2PlayerVSSettings(),
     new Pong2Player0Settings(),
     new Pong2Player05Settings(),
+    new Pong2Player025Settings(),
+    new Pong2Player075Settings(),
 
 };
 

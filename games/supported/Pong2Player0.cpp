@@ -55,11 +55,15 @@ void Pong2Player0Settings::step(const System& system) {
     // The RL score is the difference in scores
     int newScore = right-left;
     int newScoreB = left-right;
-
+    points=left+right;
     m_reward = newScore - m_score;
     m_rewardB = newScoreB - m_scoreB;
     m_score = newScore;
     m_scoreB = newScoreB;
+    sideBouncing=readRam(&system, 0x91);
+    wallBouncing=readRam(&system, 0x94)==128;
+    crash=readRam(&system, 0x90)==0;
+    serving=readRam(&system, 0xB6)==0;
     if (m_reward==-1) {m_rewardB=0;}
     else {m_reward=0;}  
 
@@ -90,7 +94,30 @@ reward_t Pong2Player0Settings::getRewardB() const {
 
     return m_rewardB; 
 }
+double Pong2Player0Settings::getSideBouncing() const { 
 
+    return sideBouncing; 
+}
+
+
+
+bool Pong2Player0Settings::getWallBouncing() const { 
+
+    return wallBouncing; 
+}
+
+int Pong2Player0Settings::getPoints() const { 
+
+    return points; 
+}
+bool Pong2Player0Settings::getCrash() const { 
+
+    return crash; 
+}
+bool Pong2Player0Settings::getServing() const { 
+
+    return serving; 
+}
 
 bool Pong2Player0Settings::isLegal(const Action& a) const {
     switch (a) {

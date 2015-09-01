@@ -204,7 +204,7 @@ class ALEInterface {
             buttons on the game over screen. */
         reward_t act(Action action);
 
-	void act2(Action actionA, Action actionB, double* rewardA, double* rewardB);
+	void act2(Action actionA,Action actionB,double* rewardA,double* rewardB,double* sideBouncing,bool* wallBouncing,int* points,bool* crash,bool* serving);
 
 
         /** Returns the vector of legal actions. */

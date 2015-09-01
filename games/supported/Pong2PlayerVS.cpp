@@ -55,12 +55,16 @@ void Pong2PlayerVSSettings::step(const System& system) {
     // The RL score is the difference in scores
     int newScore = right-left;
     int newScoreB = left-right;
-
+    
     m_reward = newScore - m_score;
     m_rewardB = newScoreB - m_scoreB;
     m_score = newScore;
     m_scoreB = newScoreB;
-
+    points=left+right;
+    sideBouncing=readRam(&system, 0x91);
+    wallBouncing=readRam(&system, 0x94)==128;
+    crash=readRam(&system, 0x90)==0;
+    serving=readRam(&system, 0xB6)==0;
     if(m_reward!=0){
     }
     // The game ends when we reach 21 points
@@ -88,7 +92,31 @@ reward_t Pong2PlayerVSSettings::getRewardB() const {
 
     return m_rewardB; 
 }
+double Pong2PlayerVSSettings::getSideBouncing() const { 
 
+    return sideBouncing; 
+}
+
+
+
+bool Pong2PlayerVSSettings::getWallBouncing() const { 
+
+    return wallBouncing; 
+}
+
+int Pong2PlayerVSSettings::getPoints() const { 
+
+    return points; 
+}
+bool Pong2PlayerVSSettings::getCrash() const { 
+
+    return crash; 
+}
+
+bool Pong2PlayerVSSettings::getServing() const { 
+
+    return serving; 
+}
 
 bool Pong2PlayerVSSettings::isLegal(const Action& a) const {
     switch (a) {

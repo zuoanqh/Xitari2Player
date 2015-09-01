@@ -76,7 +76,11 @@ class Pong2Player05Settings : public RomSettings {
         virtual int lives() const { return 0; }
         virtual int livesB() const { return 0; }
         ActionVect getStartingActions();
-
+        double getSideBouncing() const;
+        bool getWallBouncing() const;
+        int getPoints() const;
+        bool getCrash() const;
+        bool getServing() const;
     private:
 
         bool m_terminal;
@@ -84,6 +88,11 @@ class Pong2Player05Settings : public RomSettings {
         reward_t m_score;
         reward_t m_rewardB;
         reward_t m_scoreB;
+        double sideBouncing;
+        bool wallBouncing;
+        int points;
+        bool crash;
+        bool serving;
 };
 
 } // namespace ale

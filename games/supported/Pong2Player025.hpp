@@ -26,19 +26,19 @@
  *
  * *****************************************************************************
  */
-#ifndef __Pong2PlayerVS_HPP__
-#define __Pong2PlayerVS_HPP__
+#ifndef __Pong2Player025_HPP__
+#define __Pong2Player025_HPP__
 
 #include "../RomSettings.hpp"
 
 namespace ale {
 
 // RL wrapper for SpaceInvaders
-class Pong2PlayerVSSettings : public RomSettings {
+class Pong2Player025Settings : public RomSettings {
 
     public:
 
-        Pong2PlayerVSSettings();
+        Pong2Player025Settings();
 
         // reset
         void reset();
@@ -50,7 +50,7 @@ class Pong2PlayerVSSettings : public RomSettings {
         reward_t getReward() const;
 	reward_t getRewardB() const;
         // the rom-name
-        const char* rom() const { return "Pong2PlayerVS"; }
+        const char* rom() const { return "Pong2Player025"; }
 
         // create a new instance of the rom
         RomSettings* clone() const;
@@ -97,5 +97,5 @@ class Pong2PlayerVSSettings : public RomSettings {
 
 } // namespace ale
 
-#endif // __Pong2PlayerVS_HPP__
+#endif // __Pong2Player025_HPP__
 
