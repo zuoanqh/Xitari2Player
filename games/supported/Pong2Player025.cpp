@@ -62,7 +62,7 @@ void Pong2Player025Settings::step(const System& system) {
     m_scoreB = newScoreB;
     points=left+right;
     sideBouncing=readRam(&system, 0x91);
-    wallBouncing=readRam(&system, 0x94)==128;
+    wallBouncing=readRam(&system, 0x94)==128 && readRam(&system, 0xB1)>=62 && readRam(&system, 0xB1)<=190;
     crash=readRam(&system, 0x90)==0;
     serving=readRam(&system, 0xB6)==0;
     if (m_reward==-1) {m_rewardB=-0.25;}
