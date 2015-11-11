@@ -50,6 +50,13 @@ RomSettings* Pong2Player0Settings::clone() const {
 
 /* process the latest information from ALE */
 void Pong2Player0Settings::step(const System& system) {
+    crash=readRam(&system, 0x90)==0;
+    if (crash) {
+      m_reward = 0;
+      m_rewardB = 0;
+      return;
+    }
+
     int left = readRam(&system, 13); // left player score
     int right = readRam(&system, 14); // right player score
     // The RL score is the difference in scores
@@ -62,7 +69,6 @@ void Pong2Player0Settings::step(const System& system) {
     m_scoreB = newScoreB;
     sideBouncing=readRam(&system, 0x91);
     wallBouncing=readRam(&system, 0x94)==128 && readRam(&system, 0xB1)>=62 && readRam(&system, 0xB1)<=190;
-    crash=readRam(&system, 0x90)==0;
     serving=readRam(&system, 0xB6)==0;
     if (m_reward==-1) {m_rewardB=0;}
     else {m_reward=0;}  
