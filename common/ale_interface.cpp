@@ -1,3 +1,5 @@
+//Marked for replacing pong specific code.
+
 #include "ale_interface.hpp"
 
 #include "emucore/FSNode.hxx"
