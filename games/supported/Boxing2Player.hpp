@@ -26,19 +26,19 @@
  *
  * *****************************************************************************
  */
-#ifndef __Pong2Player_HPP__
-#define __Pong2Player_HPP__
+#ifndef __BOXING_HPP__
+#define __BOXING_HPP__
 
 #include "../RomSettings.hpp"
 
 namespace ale {
 
-// RL wrapper for SpaceInvaders
-class Pong2PlayerSettings : public RomSettings {
+/* RL wrapper for Boxing settings */
+class Boxing2PlayerSettings : public RomSettings {
 
     public:
 
-        Pong2PlayerSettings();
+        Boxing2PlayerSettings();
 
         // reset
         void reset();
@@ -50,14 +50,8 @@ class Pong2PlayerSettings : public RomSettings {
         reward_t getReward() const;
 		reward_t getRewardB() const;
 
-
-        double getSideBouncing() const;
-        bool getWallBouncing() const;
-        bool getCrash() const;
-        bool getServing()const;
-        int getPoints() const;
         // the rom-name
-        const char* rom() const { return "Pong2Player"; }
+        const char* rom() const { return "Boxing2Player"; }
 
         // create a new instance of the rom
         RomSettings* clone() const;
@@ -65,14 +59,13 @@ class Pong2PlayerSettings : public RomSettings {
 		// is an action legal?
         bool isLegal(const Action& a) const;
         bool isLegalB(const Action& a) const;
+		
         // is an action part of the minimal set?
         bool isMinimal(const Action& a) const;
         bool isMinimalB(const Action& a) const;
+
         // process the latest information from ALE
         void step(const System& system);
-		
-		// we need to lower the episode length further for Pong
-        //virtual int maxFrames() const;
 
         // saves the state of the rom settings
         void saveState(Serializer & ser);
@@ -82,23 +75,20 @@ class Pong2PlayerSettings : public RomSettings {
 
         virtual int lives() const { return 0; }
         virtual int livesB() const { return 0; }
-        ActionVect getStartingActions();
 
+		ActionVect getStartingActions();
     private:
 
         bool m_terminal;
         reward_t m_reward;
         reward_t m_score;
-        reward_t m_rewardB;
+		
+		reward_t m_rewardB;
         reward_t m_scoreB;
-        double sideBouncing;
-        bool wallBouncing;
-        int points;
-        bool crash;
-        bool serving;
+		
 };
 
 } // namespace ale
 
-#endif // __Pong2Player_HPP__
+#endif // __BOXING_HPP__
 

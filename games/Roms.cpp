@@ -34,6 +34,7 @@
 
 // include the game implementations
 
+#include "supported/Boxing2Player.hpp"
 #include "supported/Pong2Player.hpp"
 #include "supported/Pong2PlayerVS.hpp"
 #include "supported/Pong2Player0.hpp"
@@ -49,6 +50,7 @@ using namespace ale;
 
 /* list of supported games */
 static const RomSettings *roms[]  = {
+	new Boxing2PlayerSettings();
     new Pong2PlayerSettings(),
     new Pong2PlayerVSSettings(),
     new Pong2Player0Settings(),
