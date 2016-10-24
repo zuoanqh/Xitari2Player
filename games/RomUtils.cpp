@@ -50,10 +50,13 @@ int readRam(const System* system, int offset) {
 }
 
 
-/* extracts a decimal value from a byte */
+/* extracts a decimal value from a byte that stores 2 decimal digits with 4 bits each */
 int getDecimalScore(int index, const System* system) {
     
     int score = 0;
+    if (index < 0) {
+        return score;
+    }
     int digits_val = readRam(system, index);
     int right_digit = digits_val & 15;
     int left_digit = digits_val >> 4;
@@ -66,18 +69,11 @@ int getDecimalScore(int index, const System* system) {
 /* extracts a decimal value from 2 bytes */
 int getDecimalScore(int lower_index, int higher_index, const System* system) {
 
-    int score = 0;
-    int lower_digits_val = readRam(system, lower_index);
-    int lower_right_digit = lower_digits_val & 15;
-    int lower_left_digit = (lower_digits_val - lower_right_digit) >> 4;
-    score += ((10 * lower_left_digit) + lower_right_digit);
+    int score = getDecimalScore(lower_index, system);
     if (higher_index < 0) {
         return score;
     }
-    int higher_digits_val = readRam(system, higher_index);
-    int higher_right_digit = higher_digits_val & 15;
-    int higher_left_digit = (higher_digits_val - higher_right_digit) >> 4;
-    score += ((1000 * higher_left_digit) + 100 * higher_right_digit);
+    score += 100 * getDecimalScore(higher_index, system);
     return score;
 }
 
@@ -86,10 +82,10 @@ int getDecimalScore(int lower_index, int higher_index, const System* system) {
 int getDecimalScore(int lower_index, int middle_index, int higher_index, const System* system) {
 
     int score = getDecimalScore(lower_index, middle_index, system);
-    int higher_digits_val = readRam(system, higher_index);
-    int higher_right_digit = higher_digits_val & 15;
-    int higher_left_digit = (higher_digits_val - higher_right_digit) >> 4;
-    score += ((100000 * higher_left_digit) + 10000 * higher_right_digit);
+    if (higher_index < 0) {
+        return score;
+    }
+    score += 10000 * getDecimalScore(higher_index, system);
     return score;
 }
 
