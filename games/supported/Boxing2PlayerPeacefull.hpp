@@ -26,8 +26,8 @@
  *
  * *****************************************************************************
  */
-#ifndef __BOXING_HPP__
-#define __BOXING_HPP__
+#ifndef __BOXINGPEACEFULL_HPP__
+#define __BOXINGPEACEFULL_HPP__
 
 #include "../RomSettings.hpp"
 
@@ -90,5 +90,5 @@ class Boxing2PlayerPeacefullSettings : public RomSettings {
 
 } // namespace ale
 
-#endif // __BOXING_HPP__
+#endif // __BOXINGPEACEFULL_HPP__
 
