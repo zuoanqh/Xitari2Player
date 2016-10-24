@@ -26,7 +26,7 @@
  *
  * *****************************************************************************
  */
-#include "Boxing2PlayerPeaceful.hpp"
+#include "Boxing2PlayerPeacefull.hpp"
 #include "ale_interface.hpp"
 #include "../RomUtils.hpp"
 #include <iostream>
@@ -34,23 +34,23 @@
 using namespace ale;
 
 
-Boxing2PlayerPeacefulSettings::Boxing2PlayerPeacefulSettings() {
+Boxing2PlayerPeacefullSettings::Boxing2PlayerPeacefullSettings() {
 
     reset();
 }
 
 
 /* create a new instance of the rom */
-RomSettings* Boxing2PlayerPeacefulSettings::clone() const { 
+RomSettings* Boxing2PlayerPeacefullSettings::clone() const { 
     
-    RomSettings* rval = new Boxing2PlayerPeacefulSettings();
+    RomSettings* rval = new Boxing2PlayerPeacefullSettings();
     *rval = *this;
     return rval;
 }
 
 
 /* process the latest information from ALE */
-void Boxing2PlayerPeacefulSettings::step(const System& system) {
+void Boxing2PlayerPeacefullSettings::step(const System& system) {
 
     // update the reward
     int my_score   = getDecimalScore(0x92, &system);
@@ -79,25 +79,25 @@ void Boxing2PlayerPeacefulSettings::step(const System& system) {
 
 
 /* is end of game */
-bool Boxing2PlayerPeacefulSettings::isTerminal() const {
+bool Boxing2PlayerPeacefullSettings::isTerminal() const {
 
     return m_terminal;
 };
 
 
 /* get the most recently observed reward */
-reward_t Boxing2PlayerPeacefulSettings::getReward() const { 
+reward_t Boxing2PlayerPeacefullSettings::getReward() const { 
 
     return m_reward; 
 }
 
 /* get the most recently observed reward */
-reward_t Boxing2PlayerPeacefulSettings::getRewardB() const { 
+reward_t Boxing2PlayerPeacefullSettings::getRewardB() const { 
 
     return m_rewardB; 
 }
 
-bool Boxing2PlayerPeacefulSettings::isLegal(const Action& a) const {
+bool Boxing2PlayerPeacefullSettings::isLegal(const Action& a) const {
     switch (a) {
         // white player
         case PLAYER_A_NOOP:
@@ -124,7 +124,7 @@ bool Boxing2PlayerPeacefulSettings::isLegal(const Action& a) const {
     }   
 }
 
-bool Boxing2PlayerPeacefulSettings::isLegalB(const Action& a) const {
+bool Boxing2PlayerPeacefullSettings::isLegalB(const Action& a) const {
     switch (a) {
         // black player * "racial stereotype not intended" -- david silver on his RL lecture at college university london
         case PLAYER_B_NOOP:
@@ -152,17 +152,17 @@ bool Boxing2PlayerPeacefulSettings::isLegalB(const Action& a) const {
 }
 
 /* is an action part of the minimal set? */
-bool Boxing2PlayerPeacefulSettings::isMinimal(const Action &a) const {
+bool Boxing2PlayerPeacefullSettings::isMinimal(const Action &a) const {
     return true;  
 }
 
-bool Boxing2PlayerPeacefulSettings::isMinimalB(const Action &a) const {
+bool Boxing2PlayerPeacefullSettings::isMinimalB(const Action &a) const {
     return true; 
 }
 
 
 /* reset the state of the game */
-void Boxing2PlayerPeacefulSettings::reset() {
+void Boxing2PlayerPeacefullSettings::reset() {
     
     m_reward   = 0;
     m_score    = 0;
@@ -174,7 +174,7 @@ void Boxing2PlayerPeacefulSettings::reset() {
 
         
 /* saves the state of the rom settings */
-void Boxing2PlayerPeacefulSettings::saveState(Serializer & ser) {
+void Boxing2PlayerPeacefullSettings::saveState(Serializer & ser) {
 	
     ser.putInt(m_reward);
     ser.putInt(m_score);
@@ -184,7 +184,7 @@ void Boxing2PlayerPeacefulSettings::saveState(Serializer & ser) {
 }
 
 // loads the state of the rom settings
-void Boxing2PlayerPeacefulSettings::loadState(Deserializer & ser) {
+void Boxing2PlayerPeacefullSettings::loadState(Deserializer & ser) {
 	
     m_reward   = ser.getInt();
     m_score    = ser.getInt();
@@ -194,7 +194,7 @@ void Boxing2PlayerPeacefulSettings::loadState(Deserializer & ser) {
 }
 
 // start game in 2p mode
-ActionVect Boxing2PlayerPeacefulSettings::getStartingActions() {
+ActionVect Boxing2PlayerPeacefullSettings::getStartingActions() {
 
     ActionVect startingActions;
     startingActions.push_back(SELECT);
