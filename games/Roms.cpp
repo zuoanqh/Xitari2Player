@@ -50,7 +50,7 @@ using namespace ale;
 
 /* list of supported games */
 static const RomSettings *roms[]  = {
-	new Boxing2PlayerSettings();
+    new Boxing2PlayerSettings(),
     new Pong2PlayerSettings(),
     new Pong2PlayerVSSettings(),
     new Pong2Player0Settings(),
