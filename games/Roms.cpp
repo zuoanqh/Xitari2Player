@@ -36,6 +36,7 @@
 
 #include "supported/Boxing2Player.hpp"
 #include "supported/Boxing2PlayerPeacefull.hpp"
+#include "supported/Boxing2PlayerImbalanced.hpp"
 #include "supported/Pong2Player.hpp"
 #include "supported/Pong2PlayerVS.hpp"
 #include "supported/Pong2Player0.hpp"
@@ -53,6 +54,7 @@ using namespace ale;
 static const RomSettings *roms[]  = {
     new Boxing2PlayerSettings(),
     new Boxing2PlayerPeacefullSettings(),
+    new Boxing2PlayerImbalancedSettings(),
     new Pong2PlayerSettings(),
     new Pong2PlayerVSSettings(),
     new Pong2Player0Settings(),
