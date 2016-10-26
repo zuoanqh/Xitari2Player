@@ -59,16 +59,16 @@ void Boxing2PlayerPeacefullSettings::step(const System& system) {
     // handle KO
     if (readRam(&system, 0x92) == 0xC0) my_score   = 100;
     if (readRam(&system, 0x93) == 0xC0) oppt_score = 100;
-    m_reward = my_score - m_score;
-	m_rewardB = my_scoreB - opptscore;//punishes getting points
-    m_score = my_score;
-	m_scoreB = oppt_score;
+    m_reward = -my_score - m_score;
+    m_rewardB = -opptscore - m_score;//punishes getting points
+    m_score = -my_score;
+    m_scoreB = -oppt_score;
 
     // update terminal status
     // if either is KO, the game is over
     if (my_score == 100 || oppt_score == 100) {
-		m_reward = 0;
-		m_rewardB = 0;
+        m_reward = 0;
+        m_rewardB = 0;
         m_terminal = true;
     } else {  // otherwise check to see if out of time
         int minutes = readRam(&system, 0x90) >> 4;
