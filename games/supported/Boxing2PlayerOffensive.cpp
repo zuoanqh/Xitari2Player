@@ -26,7 +26,7 @@
  *
  * *****************************************************************************
  */
-#include "Boxing2PlayerImbalanced.hpp"
+#include "Boxing2PlayerOffensive.hpp"
 #include "ale_interface.hpp"
 #include "../RomUtils.hpp"
 #include <iostream>
@@ -34,23 +34,23 @@
 using namespace ale;
 
 
-Boxing2PlayerImbalancedSettings::Boxing2PlayerImbalancedSettings() {
+Boxing2PlayerOffensiveSettings::Boxing2PlayerOffensiveSettings() {
 
     reset();
 }
 
 
 /* create a new instance of the rom */
-RomSettings* Boxing2PlayerImbalancedSettings::clone() const { 
+RomSettings* Boxing2PlayerOffensiveSettings::clone() const { 
     
-    RomSettings* rval = new Boxing2PlayerImbalancedSettings();
+    RomSettings* rval = new Boxing2PlayerOffensiveSettings();
     *rval = *this;
     return rval;
 }
 
 
 /* process the latest information from ALE */
-void Boxing2PlayerImbalancedSettings::step(const System& system) {
+void Boxing2PlayerOffensiveSettings::step(const System& system) {
 
     // update the reward
     int my_score   = getDecimalScore(0x92, &system);
@@ -60,7 +60,7 @@ void Boxing2PlayerImbalancedSettings::step(const System& system) {
     if (readRam(&system, 0x92) == 0xC0) my_score   = 100;
     if (readRam(&system, 0x93) == 0xC0) oppt_score = 100;
 	int score_A = my_score;//encourage offensive actions, ignores cost
-	int score_B = -my_score;//encourage defensive actions, sacrifice offence
+	int score_B = oppt_score;//encourage defensive actions, sacrifice offence
     m_reward = score_A - m_score;
 	m_rewardB = score_B - m_scoreB;
     m_score = score_A;
@@ -84,25 +84,25 @@ void Boxing2PlayerImbalancedSettings::step(const System& system) {
 
 
 /* is end of game */
-bool Boxing2PlayerImbalancedSettings::isTerminal() const {
+bool Boxing2PlayerOffensiveSettings::isTerminal() const {
 
     return m_terminal;
 };
 
 
 /* get the most recently observed reward */
-reward_t Boxing2PlayerImbalancedSettings::getReward() const { 
+reward_t Boxing2PlayerOffensiveSettings::getReward() const { 
 
     return m_reward; 
 }
 
 /* get the most recently observed reward */
-reward_t Boxing2PlayerImbalancedSettings::getRewardB() const { 
+reward_t Boxing2PlayerOffensiveSettings::getRewardB() const { 
 
     return m_rewardB; 
 }
 
-bool Boxing2PlayerImbalancedSettings::isLegal(const Action& a) const {
+bool Boxing2PlayerOffensiveSettings::isLegal(const Action& a) const {
     switch (a) {
         // white player
         case PLAYER_A_NOOP:
@@ -129,7 +129,7 @@ bool Boxing2PlayerImbalancedSettings::isLegal(const Action& a) const {
     }   
 }
 
-bool Boxing2PlayerImbalancedSettings::isLegalB(const Action& a) const {
+bool Boxing2PlayerOffensiveSettings::isLegalB(const Action& a) const {
     switch (a) {
         case PLAYER_B_NOOP:
         case PLAYER_B_FIRE:
@@ -156,17 +156,17 @@ bool Boxing2PlayerImbalancedSettings::isLegalB(const Action& a) const {
 }
 
 /* is an action part of the minimal set? */
-bool Boxing2PlayerImbalancedSettings::isMinimal(const Action &a) const {
+bool Boxing2PlayerOffensiveSettings::isMinimal(const Action &a) const {
     return true;  
 }
 
-bool Boxing2PlayerImbalancedSettings::isMinimalB(const Action &a) const {
+bool Boxing2PlayerOffensiveSettings::isMinimalB(const Action &a) const {
     return true; 
 }
 
 
 /* reset the state of the game */
-void Boxing2PlayerImbalancedSettings::reset() {
+void Boxing2PlayerOffensiveSettings::reset() {
     
     m_reward   = 0;
     m_score    = 0;
@@ -178,7 +178,7 @@ void Boxing2PlayerImbalancedSettings::reset() {
 
         
 /* saves the state of the rom settings */
-void Boxing2PlayerImbalancedSettings::saveState(Serializer & ser) {
+void Boxing2PlayerOffensiveSettings::saveState(Serializer & ser) {
 	
     ser.putInt(m_reward);
     ser.putInt(m_score);
@@ -188,7 +188,7 @@ void Boxing2PlayerImbalancedSettings::saveState(Serializer & ser) {
 }
 
 // loads the state of the rom settings
-void Boxing2PlayerImbalancedSettings::loadState(Deserializer & ser) {
+void Boxing2PlayerOffensiveSettings::loadState(Deserializer & ser) {
 	
     m_reward   = ser.getInt();
     m_score    = ser.getInt();
@@ -198,7 +198,7 @@ void Boxing2PlayerImbalancedSettings::loadState(Deserializer & ser) {
 }
 
 // start game in 2p mode
-ActionVect Boxing2PlayerImbalancedSettings::getStartingActions() {
+ActionVect Boxing2PlayerOffensiveSettings::getStartingActions() {
 
     ActionVect startingActions;
     startingActions.push_back(SELECT);
