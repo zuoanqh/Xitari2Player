@@ -59,8 +59,8 @@ void Boxing2PlayerImbalancedSettings::step(const System& system) {
     // handle KO
     if (readRam(&system, 0x92) == 0xC0) my_score   = 100;
     if (readRam(&system, 0x93) == 0xC0) oppt_score = 100;
-	int score_A = my_score;//encourage offensive actions, ignores cost
-	int score_B = -my_score;//encourage defensive actions, sacrifice offence
+	int score_A = my_score;//same goal!
+	int score_B = my_score;
     m_reward = score_A - m_score;
 	m_rewardB = score_B - m_scoreB;
     m_score = score_A;
