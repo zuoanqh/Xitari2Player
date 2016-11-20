@@ -75,10 +75,6 @@ void Boxing2PlayerOffensiveSettings::step(const System& system) {
         int seconds = (readRam(&system, 0x91) & 0xF) + 
                       (readRam(&system, 0x91) >> 4) * 10;
         m_terminal = minutes == 0 && seconds == 0;
-		if (m_terminal){//punish timeout
-			m_reward = -1;
-			m_rewardB=-1;
-		}
     }
 }
 
