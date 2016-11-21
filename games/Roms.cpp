@@ -40,6 +40,7 @@
 #include "supported/Boxing2PlayerOffensive.hpp"
 #include "supported/Tennis2PlayerCompetitive.hpp"
 #include "supported/Tennis2PlayerCooperative.hpp"
+#include "supported/IceHockey2Player.hpp"
 #include "supported/Pong2Player.hpp"
 #include "supported/Pong2PlayerVS.hpp"
 #include "supported/Pong2Player0.hpp"
@@ -61,6 +62,7 @@ static const RomSettings *roms[]  = {
 	new Boxing2PlayerOffensiveSettings(),
 	new Tennis2PlayerCompetitiveSettings(),
 	new Tennis2PlayerCooperativeSettings(),
+	new IceHockey2PlayerSettings(),
     new Pong2PlayerSettings(),
     new Pong2PlayerVSSettings(),
     new Pong2Player0Settings(),
