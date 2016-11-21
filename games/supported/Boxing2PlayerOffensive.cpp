@@ -200,6 +200,7 @@ ActionVect Boxing2PlayerOffensiveSettings::getStartingActions() {
     startingActions.push_back(SELECT);
     startingActions.push_back(PLAYER_A_NOOP);
     startingActions.push_back(RESET);
+	startingActions.push_back(PLAYER_A_NOOP);
     return startingActions;
 
 }
