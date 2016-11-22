@@ -51,7 +51,7 @@ class IceHockey2PlayerSettings : public RomSettings {
 		reward_t getRewardB() const;
 		
         // the rom-name
-        const char* rom() const { return "Tennis2PlayerCooperative"; }
+        const char* rom() const { return "IceHockey2Player"; }
 
         // create a new instance of the rom
         RomSettings* clone() const;

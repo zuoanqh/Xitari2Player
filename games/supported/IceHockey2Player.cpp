@@ -88,7 +88,7 @@ reward_t IceHockey2PlayerSettings::getRewardB() const {
     return m_rewardB; 
 }
 /* is an action part of the minimal set? */
-bool Tennis2PlayerCooperativeSettings::isLegal(const Action &a) const {
+bool IceHockey2PlayerSettings::isLegal(const Action &a) const {
 	    switch (a) {
         case PLAYER_A_NOOP:
         case PLAYER_A_FIRE:
@@ -114,7 +114,7 @@ bool Tennis2PlayerCooperativeSettings::isLegal(const Action &a) const {
 		} 
 }
 /* is an action part of the minimal set? */
-bool Tennis2PlayerCooperativeSettings::isLegalB(const Action &a) const {
+bool IceHockey2PlayerSettings::isLegalB(const Action &a) const {
 	    switch (a) {
         case PLAYER_B_NOOP:
         case PLAYER_B_FIRE:
@@ -145,7 +145,7 @@ bool IceHockey2PlayerSettings::isMinimal(const Action &a) const {
 	return true;
 }
 /* is an action part of the minimal set? */
-bool Tennis2PlayerCooperativeSettings::isMinimalB(const Action &a) const {
+bool IceHockey2PlayerSettings::isMinimalB(const Action &a) const {
 	return true;  
 }
 
