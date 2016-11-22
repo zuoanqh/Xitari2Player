@@ -78,10 +78,10 @@ class IceHockey2PlayerSettings : public RomSettings {
     private:
 
         bool m_terminal;
-        reward_t m_reward;
-        reward_t m_score;
-		reward_t m_rewardB;
-        reward_t m_scoreB;
+        int m_reward;
+        int m_score;
+		int m_rewardB;
+        int m_scoreB;
 		
 		
 };
