@@ -74,7 +74,7 @@ class Tennis2PlayerCooperativeSettings : public RomSettings {
     
         int lives() const { return 0; }
 		int livesB() const { return 0; }
-
+        ActionVect getStartingActions();
     private:
 
         bool m_terminal;

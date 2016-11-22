@@ -176,4 +176,14 @@ void IceHockey2PlayerSettings::loadState(Deserializer & ser) {
   m_scoreB = ser.getInt();
   m_terminal = ser.getBool();
 }
+// start game in 2p mode
+ActionVect IceHockey2PlayerSettings::getStartingActions() {
 
+    ActionVect startingActions;
+    startingActions.push_back(SELECT);
+    startingActions.push_back(PLAYER_A_NOOP);
+    startingActions.push_back(RESET);
+	startingActions.push_back(PLAYER_A_NOOP);
+    return startingActions;
+
+}
